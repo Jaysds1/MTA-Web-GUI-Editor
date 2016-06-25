@@ -1,7 +1,6 @@
 /*
  Name:  Jaiquon Smith
  */
-var body = document.getElementById('canvas');
 GUI = function (element) {
     this.element = element;
 };
@@ -43,7 +42,7 @@ Class.setPosition = function (x, y, relative) {
     if (relative)
         this.element.style.position = 'relative';
     this.element.style.left = x+"px";
-    this.element.style.y = y+"px";
+    this.element.style.top = y+"px";
 };
 Class.getPosition = function (relative) {
     var x = this.element.style.left, y = this.element.style.top;
@@ -54,9 +53,9 @@ Class.getPosition = function (relative) {
 
 Class.setSize = function (width, height, relative) {
     if (relative)
-        this.element.data.sizeRelative = true;
-    this.element.style.width = width;
-    this.element.style.height = height;
+        this.element.dataset.sizeRelative = true;
+    this.element.style.width = width+'px';
+    this.element.style.height = height+'px';
 };
 Class.getSize = function (relative) {
     var width = this.element.style.width, height = this.element.style.height;
@@ -81,7 +80,6 @@ Class.getVisible = function () {
 
 function gui(type,parent) {
     var gui = document.createElement(type);
-    console.log(parent);
     parent.appendChild(gui);
     return gui || false;
 }
@@ -96,8 +94,8 @@ function Button(x, y, width, height, text, relative, parent) {
         s.position = 'relative';
     s.left = x+"px";
     s.top = y+"px";
-    s.width = width;
-    s.height = height;
+    s.width = width+"px";
+    s.height = height+"px";
     s.value = text;
     this.parent = parent;
     return this;
@@ -107,7 +105,8 @@ Button.prototype.constructor = Button;
 
 function CheckBox(x, y, width, height, text, selected, relative, parent) {
     parent = parent || body;
-    var element = gui('checkbox', parent);
+    var element = gui('input', parent);
+    element.type = 'checkbox';
     GUI.call(this, element);
 
     var s = element.style;
@@ -115,8 +114,8 @@ function CheckBox(x, y, width, height, text, selected, relative, parent) {
         s.position = 'relative';
     s.left = x+"px";
     s.top = y+"px";
-    s.width = width;
-    s.height = height;
+    s.width = width+"px";
+    s.height = height+"px";
     s.value = text;
     s.selected = selected;
     this.parent = parent;
@@ -127,10 +126,10 @@ CheckBox.prototype.constructor = CheckBox;
 Class = CheckBox.prototype;
 
 Class.setSelected = function (selected) {
-    this.element.selected = selected;
+    this.element.checked = selected;
 };
 Class.getSelected = function () {
-    return this.element.selected;
+    return this.element.checked;
 };
 
 function ComboBox(x, y, width, height, caption, relative, parent) {
@@ -144,8 +143,8 @@ function ComboBox(x, y, width, height, caption, relative, parent) {
         s.position = 'relative';
     s.left = x+"px";
     s.top = y+"px";
-    s.width = width;
-    s.height = height;
+    s.width = width+"px";
+    s.height = height+"px";
     this.parent = parent;
     return this;
 }
@@ -195,8 +194,8 @@ function Edit(x, y, width, height, text, relative, parent) {
         s.position = 'relative';
     s.left = x+"px";
     s.top = y+"px";
-    s.width = width;
-    s.height = height;
+    s.width = width+"px";
+    s.height = height+"px";
     element.dataset.caption = text;
     this.parent = parent;
     return this;
@@ -214,12 +213,12 @@ Class.setMasked = function (status) {
 };
 
 Class.setMaxLength = function (length) {
-    this.element.maxlength = length;
+    this.element.maxLength = length;
     return true;
 };
 
 Class.setReadOnly = function (status) {
-    this.element.readonly = status;
+    this.element.readOnly = status;
     return true;
 };
 

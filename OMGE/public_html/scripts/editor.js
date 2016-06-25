@@ -70,7 +70,9 @@ local screenW, screenH = guiGetScreenSize()
     scrollpane: {},
     combobox: {}
 }; */
+var body;
 window.onload = function(){
+    body = document.getElementById('canvas');
     var status = document.getElementById('status');
     status.innerHTML = 'Right click to start';
     status.style.color = 'orange';

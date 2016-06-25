@@ -9,7 +9,7 @@ html,body {height:100%;}
 body {background-color:black; color:orange;}
 #canvas {
     width: 100%;
-    height: 100%;
+    height: 95%;
 }
 #canvas > * {
     position: absolute;

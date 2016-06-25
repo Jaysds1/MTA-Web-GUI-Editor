@@ -1,0 +1,9 @@
+.rightclick {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    width: 10px;
+    height: 10px;
+}

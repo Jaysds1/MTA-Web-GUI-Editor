@@ -1,8 +1,10 @@
 /*
  Name:  Jaiquon Smith
  */
+
 GUI = function (element) {
     this.element = element;
+    return this;
 };
 var Class = GUI.prototype;
 Class.bringToFront = function () {
@@ -46,9 +48,11 @@ Class.setPosition = function (x, y, relative) {
 };
 Class.getPosition = function (relative) {
     var x = this.element.style.left, y = this.element.style.top;
+    x = parseInt(x.substr(0,x.indexOf("p")));
+    y = parseInt(y.substr(0,y.indexOf("p")));
     if (relative)
         x /= 100, y /= 100;
-    return x, y;
+    return {x:x, y:y};
 };
 
 Class.setSize = function (width, height, relative) {
@@ -59,9 +63,11 @@ Class.setSize = function (width, height, relative) {
 };
 Class.getSize = function (relative) {
     var width = this.element.style.width, height = this.element.style.height;
+    width = parseInt(width.substr(0,width.indexOf("p")));
+    height = parseInt(height.substr(0,height.indexOf("p")));
     if (relative)
         width /= 100, height /= 100;
-    return width, height;
+    return {width:width, height:height};
 };
 
 Class.setText = function (text) {
@@ -80,12 +86,12 @@ Class.getVisible = function () {
 
 function gui(type,parent) {
     var gui = document.createElement(type);
+    parent = parent || (body || document.getElementById('canvas'));
     parent.appendChild(gui);
     return gui || false;
 }
 
 function Button(x, y, width, height, text, relative, parent) {
-    parent = parent || body;
     var element = gui('button', parent);
     GUI.call(this, element);
 
@@ -104,7 +110,6 @@ Button.prototype = Object.create(GUI.prototype);
 Button.prototype.constructor = Button;
 
 function CheckBox(x, y, width, height, text, selected, relative, parent) {
-    parent = parent || body;
     var element = gui('input', parent);
     element.type = 'checkbox';
     GUI.call(this, element);
@@ -133,9 +138,8 @@ Class.getSelected = function () {
 };
 
 function ComboBox(x, y, width, height, caption, relative, parent) {
-    parent = parent || body;
     var element = gui('select', parent);
-    element.dataset.caption = caption;
+    //element.dataset.caption = caption;
     GUI.call(this, element);
 
     var s = element.style;
@@ -146,6 +150,10 @@ function ComboBox(x, y, width, height, caption, relative, parent) {
     s.width = width+"px";
     s.height = height+"px";
     this.parent = parent;
+    
+    var title = this.addItem(caption);
+    title.disabled = true;
+    this.setSelected(0,false);
     return this;
 }
 ComboBox.prototype = Object.create(GUI.prototype);
@@ -178,13 +186,12 @@ Class.getSelected = function () {
         if (element.childNodes[i].selected)
             return i;
 };
-Class.setSelected = function (id) {
-    this.element.childNodes[id].selected = true;
+Class.setSelected = function (id,select) {
+    this.element.childNodes[id].selected = select;
     return true;
 };
 
 function Edit(x, y, width, height, text, relative, parent) {
-    parent = parent || body;
     var element = gui('input', parent);
     element.type = 'text';
     GUI.call(this, element);
@@ -232,14 +239,14 @@ Class.getCaretIndex = function() {
 
 
 function GridList(x,y,width,height,relative,parent) {
-    
+    return this;
 }
 GridList.prototype = Object.create(GUI.prototype);
 GridList.prototype.constructor = GridList;
 Class = GridList.prototype;
 
 function Memo(x,y,width,height,text,relative,parent) {
-    
+    return this;
 }
 Memo.prototype = Object.create(GUI.prototype);
 Memo.prototype.constructor = Memo;
@@ -281,3 +288,33 @@ function Window() {}
 Window.prototype = Object.create(GUI.prototype);
 Window.prototype.constructor = Window;
 Class = Window.prototype;
+
+
+//******************************Status Label**********************************//
+
+Status = function(text){
+    this.element = document.getElementById('status');
+    if(text)
+        this.element.innerHTML = text;
+    return this;
+};
+Class = Status.prototype;
+
+Class.setText = function(text) {
+    this.element.innerHTML = text;
+};
+
+Class.setLevel = function(level) {
+    var c = this.element.style.color;
+    switch(level) {
+        case 0:
+             c = 'white';
+            break;
+        case 1:
+            c = 'orange';
+            break;
+        case 2:
+            c = 'red';
+            break;
+    }
+};

@@ -18,14 +18,23 @@ body {background-color:black; color:orange;}
 .rightclick {
     display: none;
     position: absolute;
-    top:0em;
-    left:0em;
-    width: 13em;
-    height: 10em;
     background-color: black;
-    color: orange;
+    color: white;
     overflow: hidden;
     z-index: 2;
+    opacity: 0.7;
+}
+
+option:disabled {
+    text-align: center;
+    color:white;
+}
+option:selected, option:focus, option:focused {
+    color: orangered;
+    background-color: black;
+}
+option:hover {
+    color: orangered;
 }
 
 footer {

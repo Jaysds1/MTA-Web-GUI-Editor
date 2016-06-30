@@ -25,7 +25,7 @@ body {background-color:black; color:orange;}
     opacity: 0.7;
 }
 
-option:disabled {
+option:disabled, option:hover:first-child {
     text-align: center;
     color:white;
 }

@@ -55,62 +55,62 @@
  )
  */
 /*{
- window: window,
- button: {},
- memo: {},
- label: {},
- checkbox: {},
- editbox: {},
- progressbar: {},
- radiobutton: {},
- gridlist: {},
- tabpanel: {},
- image: {},
- scrollbar: {},
- scrollpane: {},
- combobox: {}
  }; */
 
-var body, menu = {}, status;
+var body, status, srcElement, menu = {},
+        button = {},
+        memo = {},
+        label = {},
+        checkbox = {},
+        editbox = {},
+        progressbar = {},
+        radiobutton = {},
+        gridlist = {},
+        tabpanel = {},
+        image = {},
+        scrollbar = {},
+        scrollpane = {},
+        combobox = {};
 window.onload = function () {
     body = document.getElementById('canvas');
-    //status = new Status('Right click to start!');
+    status = new Status('Right click to start!');
 
 
     menu['body'] = new Menu(0, 0);
     menu['create'] = new Menu(0, 0);
-    menu['move'] = new Menu(0,0);
-    menu['move'] = new Menu(0,0);
-    menu['size'] = new Menu(0,0);
-    menu['position'] = new Menu(0,0);
-    menu['dimension'] = new Menu(0,0);
+    menu['move'] = new Menu(0, 0);
+    menu['resize'] = new Menu(0, 0);
+    menu['movable'] = new Menu(0, 0);
+    menu['size'] = new Menu(0, 0);
+    menu['position'] = new Menu(0, 0);
+    menu['dimension'] = new Menu(0, 0);
 
     menu['body'].setSize(150, 325);
     var create = menu['body'].addItem('Create');
     create.onmouseover = function () {
         hideMenu('create');
-        var pos = menu['body'].getPosition();
-        menu['create'].show(pos.x + 150, pos.y + 20);
+        showMenu('create', 1);
     };
     var move = menu['body'].addItem('Move');
     move.onmouseover = function () {
         hideMenu('move');
-        var pos = menu['body'].getPosition();
-        menu['move'].show(pos.x + 150, pos.y + 40);
+        showMenu('move', 2);
     };
     var resize = menu['body'].addItem('Resize');
     resize.onmouseover = function () {
         hideMenu('resize');
-        var pos = menu['body'].getPosition();
-        menu['resize'].show(pos.x + 150, pos.y + 40);
+        showMenu('resize', 3);
     };
-    menu['body'].addItem('Set Text');
+    var text = menu['body'].addItem('Set Text');
+    text.onclick = function (e) {
+        var newText = prompt('Set new Text');
+        srcElement.setText(newText);
+    };
     menu['body'].addItem('Set Color');
     var alpha = menu['body'].addItem('Alpha');
     alpha.onmouseover = function () {
         hideMenu('alpha');
-        var pos = menu['body'].getPosition();
-        menu['alpha'].show(pos.x + 150, pos.y + 40);
+        showMenu('alpha', 6);
     };
     //menu['body'].addItem('Variable:');
     //menu['body'].addItem('');
@@ -118,54 +118,80 @@ window.onload = function () {
     var movable = menu['body'].addItem('Movable');
     movable.onmouseover = function () {
         hideMenu('movable');
-        var pos = menu['body'].getPosition();
-        menu['movable'].show(pos.x + 150, pos.y + 40);
+        showMenu('movable', 7);
     };
     var size = menu['body'].addItem('Sizable');
     size.onmouseover = function () {
         hideMenu('size');
-        var pos = menu['body'].getPosition();
-        menu['size'].show(pos.x + 150, pos.y + 40);
+        showMenu('size', 8);
     };
     var position = menu['body'].addItem('Set Position Code');
     position.onmouseover = function () {
         hideMenu('position');
-        var pos = menu['body'].getPosition();
-        menu['position'].show(pos.x + 150, pos.y + 40);
+        showMenu('position', 9);
     };
     var dimension = menu['body'].addItem('Dimensions');
     dimension.onmouseover = function () {
         hideMenu('dimension');
-        var pos = menu['body'].getPosition();
-        menu['dimension'].show(pos.x + 150, pos.y + 40);
+        showMenu('dimension', 10);
     };
     //menu['body'].addItem('Properties');
-    menu['body'].addItem('Move To Back');
+    var back = menu['body'].addItem('Move To Back');
+    back.onclick = function (e) {
+        if (e.target !== back)
+            return;
+        srcElement.moveToBack();
+    };
     //var copy = menu['body'].addItem('Copy');
     //menu['body'].addItem('Parent Menu');
     var del = menu['body'].addItem('Delete');
+    del.onclick = function (e) {
+        if (e.target !== del)
+            return;
+        console.log(srcElement);
+    };
     var cancel = menu['body'].addItem('Cancel');
 
     menu['create'].setItemText(0, "Create Item");
     menu['create'].setSize(150, 230);
-    menu['create'].addItem('Button');
-    menu['create'].addItem('Memo');
-    menu['create'].addItem('Label');
-    menu['create'].addItem('Checkbox');
-    menu['create'].addItem('Edit box');
-    menu['create'].addItem('Progress Bar');
-    menu['create'].addItem('Radio Button');
-    menu['create'].addItem('Gridlist');
-    menu['create'].addItem('Tab Panel');
-    menu['create'].addItem('Image');
-    menu['create'].addItem('Scrollbar');
-    menu['create'].addItem('Scrollpane');
-    menu['create'].addItem('Combobox');
-    
+    var button = menu['create'].addItem('Button');
+    button.onclick = function (e) {
+        if (e.target !== button)
+            return;
+        var pos = menu['body'].getPosition();
+        var dummmy = new Button(pos.x, pos.y, 100, 100, '', false);
+    };
+    var memo = menu['create'].addItem('Memo');
+    memo.onclick = function (e) {
+        if (e.target !== memo)
+            return;
+        var pos = menu['body'].getPosition();
+        var dummy = new Memo(pos.x, pos.y, 100, 100, '', false);
+    };
+    var label = menu['create'].addItem('Label');
+    label.onclick = function (e) {
+        if (e.target !== label)
+            return;
+        var pos = menu['body'].getPosition();
+        var dummy = new Label(pos.x, pos.y, 100, 100, '', false);
+    };
+    var checkbox = menu['create'].addItem('Checkbox');
+    var edit = menu['create'].addItem('Edit box');
+    var progress = menu['create'].addItem('Progress Bar');
+    var radio = menu['create'].addItem('Radio Button');
+    var gridlist = menu['create'].addItem('Gridlist');
+    var tabpanel = menu['create'].addItem('Tab Panel');
+    var image = menu['create'].addItem('Image');
+    var scrollbar = menu['create'].addItem('Scrollbar');
+    var scrollpage = menu['create'].addItem('Scrollpane');
+    var combobox = menu['create'].addItem('Combobox');
+
 
     body.oncontextmenu = function (e) {
         if (e.target.className !== 'rightclick' && e.target.className !== 'option')
             menu['body'].show(e.clientX, e.clientY);
+        if (e.target === body)
+            srcElement = body;
         e.preventDefault();
     };
     body.onclick = function (e) {
@@ -183,5 +209,9 @@ window.onload = function () {
         for (var m in menu)
             if (m !== 'body' && m !== leave)
                 menu[m].hide();
+    };
+    showMenu = function (show, plusy) {
+        var pos = menu['body'].getPosition();
+        menu[show].show(pos.x + 150, pos.y + (plusy * 20));
     };
 };

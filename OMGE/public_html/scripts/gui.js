@@ -94,6 +94,11 @@ function gui(type,parent) {
 function Button(x, y, width, height, text, relative, parent) {
     var element = gui('button', parent);
     GUI.call(this, element);
+    
+    element.oncontextmenu = function(e) {
+        srcElement = this;
+        menu['body'].setItemText(0,'Button');
+    };
 
     var s = element.style;
     if (relative)
@@ -113,6 +118,10 @@ function CheckBox(x, y, width, height, text, selected, relative, parent) {
     var element = gui('input', parent);
     element.type = 'checkbox';
     GUI.call(this, element);
+    element.oncontextmenu = function(e) {
+        srcElement = element;
+        menu['body'].setItemText(0,'Checkbox');
+    };
 
     var s = element.style;
     if (relative)
@@ -139,8 +148,11 @@ Class.getSelected = function () {
 
 function ComboBox(x, y, width, height, caption, relative, parent) {
     var element = gui('select', parent);
-    //element.dataset.caption = caption;
     GUI.call(this, element);
+    element.oncontextmenu = function(e) {
+        srcElement = element;
+        menu['body'].setItemText(0,'Combobox');
+    };
 
     var s = element.style;
     if (relative)
@@ -195,6 +207,10 @@ function Edit(x, y, width, height, text, relative, parent) {
     var element = gui('input', parent);
     element.type = 'text';
     GUI.call(this, element);
+    element.oncontextmenu = function(e) {
+        srcElement = element;
+        menu['body'].setItemText(0,'Edit box');
+    };
 
     var s = element.style;
     if (relative)

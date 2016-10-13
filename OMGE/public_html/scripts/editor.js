@@ -57,7 +57,7 @@
 /*{
  }; */
 
-var body, status, srcElement, menu = {},
+var status, srcElement, menu = {},
         button = {},
         memo = {},
         label = {},
@@ -70,12 +70,17 @@ var body, status, srcElement, menu = {},
         image = {},
         scrollbar = {},
         scrollpane = {},
-        combobox = {};
+        combobox = {}; //Element Storage
+
 window.onload = function () {
-    body = document.getElementById('canvas');
-    status = new Status('Right click to start!');
+    var l = document.getElementById('loader'); //Get loader
+    l.style.display = 'block'; //Show loader
+    
+    window.body = document.getElementById('canvas'); //Get window canvas
+    status = new Status('Right click to start!'); //Instructions
 
 
+    //Create menu-ready interactions
     menu['body'] = new Menu(0, 0);
     menu['create'] = new Menu(0, 0);
     menu['move'] = new Menu(0, 0);
@@ -86,24 +91,29 @@ window.onload = function () {
     menu['dimension'] = new Menu(0, 0);
 
     menu['body'].setSize(150, 325);
+    //Create menu interaction
     var create = menu['body'].addItem('Create');
     create.onmouseover = function () {
         hideMenu('create');
         showMenu('create', 1);
     };
+    //Move menu interaction
     var move = menu['body'].addItem('Move');
     move.onmouseover = function () {
         hideMenu('move');
         showMenu('move', 2);
     };
+    //Resize menu interaction
     var resize = menu['body'].addItem('Resize');
     resize.onmouseover = function () {
         hideMenu('resize');
         showMenu('resize', 3);
     };
+    //Text Selection
     var text = menu['body'].addItem('Set Text');
     text.onclick = function (e) {
         var newText = prompt('Set new Text');
+        console.log(srcElement);
         srcElement.setText(newText);
     };
     menu['body'].addItem('Set Color');
@@ -149,6 +159,7 @@ window.onload = function () {
         if (e.target !== del)
             return;
         console.log(srcElement);
+        srcElement.delete();
     };
     var cancel = menu['body'].addItem('Cancel');
 
@@ -190,8 +201,10 @@ window.onload = function () {
     body.oncontextmenu = function (e) {
         if (e.target.className !== 'rightclick' && e.target.className !== 'option')
             menu['body'].show(e.clientX, e.clientY);
-        if (e.target === body)
+        if (e.target === body){
             srcElement = body;
+            menu['body'].setItemText(0,'Window');
+        }
         e.preventDefault();
     };
     body.onclick = function (e) {
@@ -214,4 +227,6 @@ window.onload = function () {
         var pos = menu['body'].getPosition();
         menu[show].show(pos.x + 150, pos.y + (plusy * 20));
     };
+
+    l.style.display = 'none';
 };

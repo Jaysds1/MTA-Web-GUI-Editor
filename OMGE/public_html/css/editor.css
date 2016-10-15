@@ -41,6 +41,8 @@ footer {
     text-align: center;
 }
 
+#canvas > *:hover {border:1px solid red;}
+
 /*W3CSS How-To */
 #loader {
     position: fixed;

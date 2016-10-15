@@ -118,8 +118,10 @@ window.onload = function () {
     var text = menu['body'].addItem('Set Text');
     text.onclick = function (e) {
         var newText = prompt('Set new Text');
-        console.log(srcElement);
-        srcElement.setText(newText);
+        var gui = getGuiByElement(srcElement);
+        if(!gui)
+            return status.setText('');
+        gui.setText(newText);
     };
     //Set color
     menu['body'].addItem('Set Color');
@@ -164,9 +166,7 @@ window.onload = function () {
     del.onclick = function (e) {
         if (e.target !== del)
             return;
-        console.log(srcElement);
         var gui = getGuiByElement(srcElement);
-        console.log(gui);
         if(!gui)
             status.setText("Could not delete element");
         else

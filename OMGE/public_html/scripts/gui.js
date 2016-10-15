@@ -24,7 +24,7 @@ var elements = {
 //Similar function as MTA 'getElementsByType'
 function getGuiElementsByType(type) {
     var tmpArray;
-    switch(type){
+    switch(type.toLowerCase()){
         case 'button':
             tmpArray = elements['button'];
             break;
@@ -55,12 +55,14 @@ function getGuiElementsByType(type) {
         case 'select':
             tmpArray = elements['combobox'];
             break;
+        default:
+            tmpArray = false;
     }
     return tmpArray;
 }
 function getGuiByElement(element){
     //Temporary array for storing the element's found array
-    var type = element.tagName.toLowerCase()==='input'?element.type:element.tagName;
+    var type = element.tagName==='INPUT'?element.type:element.tagName;
     var tmpArray = getGuiElementsByType(type);
     if(!tmpArray)
         return false;
@@ -229,7 +231,7 @@ function ComboBox(x, y, width, height, caption, relative, parent) {
     var element = gui('select', parent);
     GUI.call(this, element);
     element.oncontextmenu = function (e) {
-        srcElement = element;
+        srcElement = this;
         menu['body'].setItemText(0, 'Combobox');
     };
 
@@ -289,7 +291,7 @@ function Edit(x, y, width, height, text, relative, parent) {
     element.type = 'text';
     GUI.call(this, element);
     element.oncontextmenu = function (e) {
-        srcElement = element;
+        srcElement = this;
         menu['body'].setItemText(0, 'Edit box');
     };
 
@@ -348,7 +350,8 @@ Class = GridList.prototype;
 function Memo(x, y, width, height, text, relative, parent) {
     var element = gui('textarea', parent);
     GUI.call(this, element);
-    element.oncontextarea = function () {
+    element.oncontextmenu = function (e) {
+        console.log(e);
         srcElement = this;
         menu['body'].setItemText(0, 'Memo');
     };
@@ -373,7 +376,7 @@ Class = Memo.prototype;
 function ProgressBar(x, y, width, height, relative, parent) {
     var element = gui('progress', parent);
     GUI.call(this, element);
-    element.oncontextarea = function () {
+    element.oncontextmenu = function () {
         srcElement = this;
         menu['body'].setItemText(0, 'Progress');
     };
@@ -398,7 +401,7 @@ function RadioButton(x, y, width, height, text, relative, parent) {
     var element = gui('input', parent);
     element.type = 'radio';
     GUI.call(this, element);
-    element.oncontextarea = function () {
+    element.oncontextmenu = function () {
         srcElement = this;
         menu['body'].setItemText(0, 'Radio Button');
     };
@@ -423,7 +426,7 @@ Class = RadioButton.prototype;
 function ScrollBar(x, y, width, height, horizontal, relative, parent) {
     var element = gui('', parent);
     GUI.call(this, element);
-    element.oncontextarea = function () {
+    element.oncontextmenu = function () {
         srcElement = this;
         menu['body'].setItemText(0, '');
     };
@@ -438,7 +441,7 @@ Class = ScrollBar.prototype;
 function ScrollPane(x, y, width, height, relative, parent) {
     var element = gui('', parent);
     GUI.call(this, element);
-    element.oncontextarea = function () {
+    element.oncontextmenu = function () {
         srcElement = this;
         menu['body'].setItemText(0, '');
     };
@@ -453,7 +456,7 @@ Class = ScrollPane.prototype;
 function StaticImage(x, y, width, height, path, relative, parent) {
     var element = gui('img', parent);
     GUI.call(this, element);
-    element.oncontextarea = function () {
+    element.oncontextmenu = function () {
         srcElement = this;
         menu['body'].setItemText(0, 'Static Image');
     };
@@ -478,7 +481,7 @@ Class = StaticImage.prototype;
 function TabPanel(x, y, width, height, relative, parent) {
     var element = gui('', parent);
     GUI.call(this, element);
-    element.oncontextarea = function () {
+    element.oncontextmenu = function () {
         srcElement = this;
         menu['body'].setItemText(0, '');
     };
@@ -492,7 +495,7 @@ Class = TabPanel.prototype;
 function Tab(text, parent) {
     var element = gui('', parent);
     GUI.call(this, element);
-    element.oncontextarea = function () {
+    element.oncontextmenu = function () {
         srcElement = this;
         menu['body'].setItemText(0, '');
     };
@@ -506,7 +509,7 @@ Class = Tab.prototype;
 function Label(x, y, width, height, text, relative, parent) {
     var element = gui('label', parent);
     GUI.call(this, element);
-    element.oncontextarea = function () {
+    element.oncontextmenu = function () {
         srcElement = this;
         menu['body'].setItemText(0, 'Label');
     };

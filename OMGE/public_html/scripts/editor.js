@@ -104,6 +104,13 @@ window.onload = function () {
     };
     //Move menu interaction
     var move = menu['body'].addItem('Move');
+    move.onclick = function() {
+      body.addEventListener('mousemove',_moveXY);
+      srcElement.onclick = function() {
+        body.removeEventListener('mousemove',_moveXY);  
+      };
+      hideAll();
+    };
     move.onmouseover = function () { //Show Moving Menu
         hideMenu('move');
         showMenu('move', 2);
@@ -119,14 +126,15 @@ window.onload = function () {
     text.onclick = function (e) { //Set Selected Element Text
         var newText = prompt('Set new Text');
         var gui = getGuiByElement(srcElement);
-        if(!gui)
+        if (!gui)
             return status.setText('');
         gui.setText(newText);
+        hideAll();
     };
     //Set color
     var color = menu['body'].addItem('Set Color');
-    color.onclick = function() {
-        
+    color.onclick = function () {
+
     };
     var alpha = menu['body'].addItem('Alpha');
     alpha.onmouseover = function () { //Show Alpha-ing Menu
@@ -162,9 +170,10 @@ window.onload = function () {
         if (e.target !== back)
             return;
         var gui = getGuiByElement(srcElement);
-        if(!gui)
+        if (!gui)
             return status.setText('');
         gui.moveToBack();
+        hideAll();
     };
     //var copy = menu['body'].addItem('Copy');
     //menu['body'].addItem('Parent Menu');
@@ -173,15 +182,15 @@ window.onload = function () {
         if (e.target !== del)
             return;
         var gui = getGuiByElement(srcElement);
-        if(!gui)
+        if (!gui)
             return status.setText("Could not delete element");
         gui.destroy();
+        hideAll();
     };
     //Cancel out the menu
     var cancel = menu['body'].addItem('Cancel');
     cancel.onclick = function () {
-        hideMenu('body'); //Hide every other menu
-        menu['body'].hide(); //Hide the body menu afterwards
+        hideAll();
     };
 
     //Create item Menu
@@ -193,6 +202,7 @@ window.onload = function () {
             return;
         var pos = menu['body'].getPosition();
         Editor['button'].push(new Button(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
     };
     var memo = menu['create'].addItem('Memo');
     memo.onclick = function (e) { //Create Memo
@@ -200,6 +210,7 @@ window.onload = function () {
             return;
         var pos = menu['body'].getPosition();
         Editor['memo'].push(new Memo(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
     };
     var label = menu['create'].addItem('Label');
     label.onclick = function (e) { //Create Label
@@ -207,6 +218,7 @@ window.onload = function () {
             return;
         var pos = menu['body'].getPosition();
         Editor['label'].push(new Label(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
     };
     var checkbox = menu['create'].addItem('Checkbox');
     checkbox.onclick = function (e) { //Create CheckBox
@@ -214,68 +226,114 @@ window.onload = function () {
             return;
         var pos = menu['body'].getPosition();
         Editor['checkbox'].push(new CheckBox(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
     };
     var edit = menu['create'].addItem('Edit box');
-    edit.onclick = function(e) { //Create Edit
+    edit.onclick = function (e) { //Create Edit
         if (e.target !== edit)
             return;
         var pos = menu['body'].getPosition();
-        Editor['edit'].push(new Edit(pos.x,pos.y,100,50,'',false));
+        Editor['edit'].push(new Edit(pos.x, pos.y, 100, 50, '', false));
+        hideAll();
     };
     var progress = menu['create'].addItem('Progress Bar');
-    progress.onclick = function(e) { //Create ProgressBar
+    progress.onclick = function (e) { //Create ProgressBar
         if (e.target !== progress)
             return;
         var pos = menu['body'].getPosition();
-        Editor['progressbar'].push(new ProgressBar(pos.x,pos.y,100,50,false));
+        Editor['progressbar'].push(new ProgressBar(pos.x, pos.y, 100, 50, false));
+        hideAll();
     };
     var radio = menu['create'].addItem('Radio Button');
-    radio.onclick = function(e) { //Create RadioButton
+    radio.onclick = function (e) { //Create RadioButton
         if (e.target !== radio)
             return;
         var pos = menu['body'].getPosition();
-        Editor['radiobutton'].push(new RadioButton(pos.x,pos.y,100,100,'',false));
+        Editor['radiobutton'].push(new RadioButton(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
     };
     var gridlist = menu['create'].addItem('Gridlist');
-    gridlist.onclick = function(e) { //Create Gridlist
+    gridlist.onclick = function (e) { //Create Gridlist
         if (e.target !== gridlist)
             return;
         var pos = menu['body'].getPosition();
+        hideAll();
     };
     var tabpanel = menu['create'].addItem('Tab Panel');
-    tabpanel.onclick = function(e) { //Create TabPanel
+    tabpanel.onclick = function (e) { //Create TabPanel
         if (e.target !== tabpanel)
             return;
         var pos = menu['body'].getPosition();
+        hideAll();
     };
     var image = menu['create'].addItem('Image');
-    image.onclick = function(e) { //Create Image
+    image.onclick = function (e) { //Create Image
         if (e.target !== image)
             return;
         var pos = menu['body'].getPosition();
-        Editor['staticimage'].push(new StaticImage(pos.x,pos.y,100,100,'',false));
+        Editor['staticimage'].push(new StaticImage(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
     };
     var scrollbar = menu['create'].addItem('Scrollbar');
-    scrollbar.onclick = function(e) { //Create ScrollBar
+    scrollbar.onclick = function (e) { //Create ScrollBar
         if (e.target !== scrollbar)
             return;
         var pos = menu['body'].getPosition();
         Editor['scrollbar'].push(new ScrollBar());
+        hideAll();
     };
     var scrollpane = menu['create'].addItem('Scrollpane');
-    scrollpane.onclick = function(e) { //Create ScrollPane
+    scrollpane.onclick = function (e) { //Create ScrollPane
         if (e.target !== scrollpane)
             return;
         var pos = menu['body'].getPosition();
-        Editor['scrollpane'].push(new ScrollPane(pos.x,pos.y));
+        Editor['scrollpane'].push(new ScrollPane(pos.x, pos.y));
+        hideAll();
     };
     var combobox = menu['create'].addItem('Combobox');
-    combobox.onclick = function(e) { //Create ComboBox
+    combobox.onclick = function (e) { //Create ComboBox
         if (e.target !== combobox)
             return;
         var pos = menu['body'].getPosition();
-        Editor['combobox'].push(new ComboBox(pos.x,pos.y,100,100,'',false));
+        Editor['combobox'].push(new ComboBox(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
     };
+
+    //Movement Memu
+    menu['move'].setItemText(0, 'Movement');
+    var moveX = menu['move'].addItem('Move X');
+    moveX.onclick = function () {
+        body.addEventListener('mousemove', _moveX);
+        srcElement.onclick = function () {
+            body.removeEventListener('mousemove',_moveX);
+        };
+        hideAll();
+    };
+    var moveY = menu['move'].addItem('Move Y');
+    moveY.onclick = function () {
+        body.addEventListener('mousemove', _moveY);
+        srcElement.onclick = function () {
+            body.removeEventListener('mousemove',_moveY);
+        };
+        hideAll();
+    };
+
+    //Resizement Menu
+    menu['resize'].setItemText(0, 'Resize');
+    var resizeWidth = menu['resize'].addItem('Resize Width');
+    resizeWidth.onclick = function () {};
+    var resizeHeight = menu['resize'].addItem('Resize Height');
+    resizeHeight.onclick = function () {};
+    var parentWidth = menu['resize'].addItem('Fit Parent Width');
+    parentWidth.onclick = function () {};
+    var parentHeight = menu['resize'].addItem('Fit Parent Height');
+    parentHeight.onclick = function () {};
+    //Movable Menu (On or Off)
+    menu['movable'].setItemText(0, 'Movable');
+    var movableOn = menu['movable'].addItem('Yes');
+    movableOn.onclick = function () {};
+    var movableOff = menu['movable'].addItem('No');
+    movableOff.onclick = function () {};
 
     //Main window configuration
     body.oncontextmenu = function (e) { //Create custom context menu
@@ -299,7 +357,7 @@ window.onload = function () {
                 if (m !== 'body')
                     menu[m].hide();
     };
-    
+
     //Custom Menu Functions
     hideMenu = function (leave) {
         for (var m in menu)
@@ -310,6 +368,26 @@ window.onload = function () {
         var pos = menu['body'].getPosition();
         menu[show].show(pos.x + 150, pos.y + (plusy * 20));
     };
+    hideAll = function() {
+        hideMenu('body'); //Hide every other menu
+        menu['body'].hide(); //Hide the body menu afterwards
+    };
+
+    //Event Functions
+    function _moveX(e) {
+        var gui = getGuiByElement(srcElement);
+        var pos = gui.getPosition();
+        gui.setPosition(e.clientX,pos.y);
+    }
+    function _moveY(e) {
+        var gui = getGuiByElement(srcElement);
+        var pos = gui.getPosition();
+        gui.setPosition(pos.x,e.clientY);
+    }
+    function _moveXY(e) {
+        var gui = getGuiByElement(srcElement);
+        gui.setPosition(e.clientX,e.clientY);
+    }
 
     l.style.display = 'none'; //Stop loader
 };

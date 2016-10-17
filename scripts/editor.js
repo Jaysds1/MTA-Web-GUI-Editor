@@ -55,119 +55,297 @@
  )
  */
 /*{
- window: window,
- button: {},
- memo: {},
- label: {},
- checkbox: {},
- editbox: {},
- progressbar: {},
- radiobutton: {},
- gridlist: {},
- tabpanel: {},
- image: {},
- scrollbar: {},
- scrollpane: {},
- combobox: {}
  }; */
 
-var body, menu = {}, status;
+var status, srcElement, menu = {},
+        Editor = {
+            tab: [],
+            progressbar: [],
+            edit: [],
+            label: [],
+            window: [],
+            checkbox: [],
+            memo: [],
+            scrollpane: [],
+            staticimage: [],
+            tabpanel: [],
+            radiobutton: [],
+            button: [],
+            gridlist: [],
+            scrollbar: [],
+            combobox: []
+        }; //Element Storage
+
 window.onload = function () {
-    body = document.getElementById('canvas');
-    //status = new Status('Right click to start!');
+    var l = document.getElementById('loader'); //Get loader
+    l.style.display = 'block'; //Show loader
+
+    window.body = document.getElementById('canvas'); //Get window canvas
+    status = new Status('Right click to start!'); //Instructions
 
 
+    //Create menu-ready interactions
     menu['body'] = new Menu(0, 0);
     menu['create'] = new Menu(0, 0);
-    menu['move'] = new Menu(0,0);
-    menu['move'] = new Menu(0,0);
-    menu['size'] = new Menu(0,0);
-    menu['position'] = new Menu(0,0);
-    menu['dimension'] = new Menu(0,0);
+    menu['move'] = new Menu(0, 0);
+    menu['resize'] = new Menu(0, 0);
+    menu['movable'] = new Menu(0, 0);
+    menu['size'] = new Menu(0, 0);
+    menu['position'] = new Menu(0, 0);
+    menu['dimension'] = new Menu(0, 0);
 
+    //Start Organizing the body first
     menu['body'].setSize(150, 325);
+    //Create menu interaction
     var create = menu['body'].addItem('Create');
-    create.onmouseover = function () {
+    create.onmouseover = function () { //Show Creation Menu
         hideMenu('create');
-        var pos = menu['body'].getPosition();
-        menu['create'].show(pos.x + 150, pos.y + 20);
+        showMenu('create', 1);
     };
+    //Move menu interaction
     var move = menu['body'].addItem('Move');
-    move.onmouseover = function () {
+    move.onclick = function() {
+      body.addEventListener('mousemove',_moveXY);
+      srcElement.onclick = function() {
+        body.removeEventListener('mousemove',_moveXY);  
+      };
+      hideAll();
+    };
+    move.onmouseover = function () { //Show Moving Menu
         hideMenu('move');
-        var pos = menu['body'].getPosition();
-        menu['move'].show(pos.x + 150, pos.y + 40);
+        showMenu('move', 2);
     };
+    //Resize menu interaction
     var resize = menu['body'].addItem('Resize');
-    resize.onmouseover = function () {
+    resize.onmouseover = function () { //Show Resizing Menu
         hideMenu('resize');
-        var pos = menu['body'].getPosition();
-        menu['resize'].show(pos.x + 150, pos.y + 40);
+        showMenu('resize', 3);
     };
-    menu['body'].addItem('Set Text');
-    menu['body'].addItem('Set Color');
+    //Text Selection
+    var text = menu['body'].addItem('Set Text');
+    text.onclick = function (e) { //Set Selected Element Text
+        var newText = prompt('Set new Text');
+        var gui = getGuiByElement(srcElement);
+        if (!gui)
+            return status.setText('');
+        gui.setText(newText);
+        hideAll();
+    };
+    //Set color
+    var color = menu['body'].addItem('Set Color');
+    color.onclick = function () {
+
+    };
     var alpha = menu['body'].addItem('Alpha');
-    alpha.onmouseover = function () {
+    alpha.onmouseover = function () { //Show Alpha-ing Menu
         hideMenu('alpha');
-        var pos = menu['body'].getPosition();
-        menu['alpha'].show(pos.x + 150, pos.y + 40);
+        showMenu('alpha', 6);
     };
     //menu['body'].addItem('Variable:');
     //menu['body'].addItem('');
     //menu['body'].addItem('Output Type:');
     var movable = menu['body'].addItem('Movable');
-    movable.onmouseover = function () {
+    movable.onmouseover = function () { //Show Movable Menu
         hideMenu('movable');
-        var pos = menu['body'].getPosition();
-        menu['movable'].show(pos.x + 150, pos.y + 40);
+        showMenu('movable', 7);
     };
     var size = menu['body'].addItem('Sizable');
-    size.onmouseover = function () {
+    size.onmouseover = function () { //Show Sizing Menu
         hideMenu('size');
-        var pos = menu['body'].getPosition();
-        menu['size'].show(pos.x + 150, pos.y + 40);
+        showMenu('size', 8);
     };
     var position = menu['body'].addItem('Set Position Code');
-    position.onmouseover = function () {
+    position.onmouseover = function () { //Show Positioning Menu
         hideMenu('position');
-        var pos = menu['body'].getPosition();
-        menu['position'].show(pos.x + 150, pos.y + 40);
+        showMenu('position', 9);
     };
     var dimension = menu['body'].addItem('Dimensions');
-    dimension.onmouseover = function () {
+    dimension.onmouseover = function () { //Show Dimensioning Menu
         hideMenu('dimension');
-        var pos = menu['body'].getPosition();
-        menu['dimension'].show(pos.x + 150, pos.y + 40);
+        showMenu('dimension', 10);
     };
     //menu['body'].addItem('Properties');
-    menu['body'].addItem('Move To Back');
+    var back = menu['body'].addItem('Move To Back');
+    back.onclick = function (e) { //Move Selected Element Back
+        if (e.target !== back)
+            return;
+        var gui = getGuiByElement(srcElement);
+        if (!gui)
+            return status.setText('');
+        gui.moveToBack();
+        hideAll();
+    };
     //var copy = menu['body'].addItem('Copy');
     //menu['body'].addItem('Parent Menu');
     var del = menu['body'].addItem('Delete');
+    del.onclick = function (e) { //Delete Selected Element
+        if (e.target !== del)
+            return;
+        var gui = getGuiByElement(srcElement);
+        if (!gui)
+            return status.setText("Could not delete element");
+        gui.destroy();
+        hideAll();
+    };
+    //Cancel out the menu
     var cancel = menu['body'].addItem('Cancel');
+    cancel.onclick = function () {
+        hideAll();
+    };
 
+    //Create item Menu
     menu['create'].setItemText(0, "Create Item");
     menu['create'].setSize(150, 230);
-    menu['create'].addItem('Button');
-    menu['create'].addItem('Memo');
-    menu['create'].addItem('Label');
-    menu['create'].addItem('Checkbox');
-    menu['create'].addItem('Edit box');
-    menu['create'].addItem('Progress Bar');
-    menu['create'].addItem('Radio Button');
-    menu['create'].addItem('Gridlist');
-    menu['create'].addItem('Tab Panel');
-    menu['create'].addItem('Image');
-    menu['create'].addItem('Scrollbar');
-    menu['create'].addItem('Scrollpane');
-    menu['create'].addItem('Combobox');
-    
+    var button = menu['create'].addItem('Button');
+    button.onclick = function (e) { //Create Button
+        if (e.target !== button)
+            return;
+        var pos = menu['body'].getPosition();
+        Editor['button'].push(new Button(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
+    };
+    var memo = menu['create'].addItem('Memo');
+    memo.onclick = function (e) { //Create Memo
+        if (e.target !== memo)
+            return;
+        var pos = menu['body'].getPosition();
+        Editor['memo'].push(new Memo(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
+    };
+    var label = menu['create'].addItem('Label');
+    label.onclick = function (e) { //Create Label
+        if (e.target !== label)
+            return;
+        var pos = menu['body'].getPosition();
+        Editor['label'].push(new Label(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
+    };
+    var checkbox = menu['create'].addItem('Checkbox');
+    checkbox.onclick = function (e) { //Create CheckBox
+        if (e.target !== checkbox)
+            return;
+        var pos = menu['body'].getPosition();
+        Editor['checkbox'].push(new CheckBox(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
+    };
+    var edit = menu['create'].addItem('Edit box');
+    edit.onclick = function (e) { //Create Edit
+        if (e.target !== edit)
+            return;
+        var pos = menu['body'].getPosition();
+        Editor['edit'].push(new Edit(pos.x, pos.y, 100, 50, '', false));
+        hideAll();
+    };
+    var progress = menu['create'].addItem('Progress Bar');
+    progress.onclick = function (e) { //Create ProgressBar
+        if (e.target !== progress)
+            return;
+        var pos = menu['body'].getPosition();
+        Editor['progressbar'].push(new ProgressBar(pos.x, pos.y, 100, 50, false));
+        hideAll();
+    };
+    var radio = menu['create'].addItem('Radio Button');
+    radio.onclick = function (e) { //Create RadioButton
+        if (e.target !== radio)
+            return;
+        var pos = menu['body'].getPosition();
+        Editor['radiobutton'].push(new RadioButton(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
+    };
+    var gridlist = menu['create'].addItem('Gridlist');
+    gridlist.onclick = function (e) { //Create Gridlist
+        if (e.target !== gridlist)
+            return;
+        var pos = menu['body'].getPosition();
+        hideAll();
+    };
+    var tabpanel = menu['create'].addItem('Tab Panel');
+    tabpanel.onclick = function (e) { //Create TabPanel
+        if (e.target !== tabpanel)
+            return;
+        var pos = menu['body'].getPosition();
+        hideAll();
+    };
+    var image = menu['create'].addItem('Image');
+    image.onclick = function (e) { //Create Image
+        if (e.target !== image)
+            return;
+        var pos = menu['body'].getPosition();
+        Editor['staticimage'].push(new StaticImage(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
+    };
+    var scrollbar = menu['create'].addItem('Scrollbar');
+    scrollbar.onclick = function (e) { //Create ScrollBar
+        if (e.target !== scrollbar)
+            return;
+        var pos = menu['body'].getPosition();
+        Editor['scrollbar'].push(new ScrollBar());
+        hideAll();
+    };
+    var scrollpane = menu['create'].addItem('Scrollpane');
+    scrollpane.onclick = function (e) { //Create ScrollPane
+        if (e.target !== scrollpane)
+            return;
+        var pos = menu['body'].getPosition();
+        Editor['scrollpane'].push(new ScrollPane(pos.x, pos.y));
+        hideAll();
+    };
+    var combobox = menu['create'].addItem('Combobox');
+    combobox.onclick = function (e) { //Create ComboBox
+        if (e.target !== combobox)
+            return;
+        var pos = menu['body'].getPosition();
+        Editor['combobox'].push(new ComboBox(pos.x, pos.y, 100, 100, '', false));
+        hideAll();
+    };
 
-    body.oncontextmenu = function (e) {
+    //Movement Memu
+    menu['move'].setItemText(0, 'Movement');
+    var moveX = menu['move'].addItem('Move X');
+    moveX.onclick = function () {
+        body.addEventListener('mousemove', _moveX);
+        srcElement.onclick = function () {
+            body.removeEventListener('mousemove',_moveX);
+        };
+        hideAll();
+    };
+    var moveY = menu['move'].addItem('Move Y');
+    moveY.onclick = function () {
+        body.addEventListener('mousemove', _moveY);
+        srcElement.onclick = function () {
+            body.removeEventListener('mousemove',_moveY);
+        };
+        hideAll();
+    };
+
+    //Resizement Menu
+    menu['resize'].setItemText(0, 'Resize');
+    var resizeWidth = menu['resize'].addItem('Resize Width');
+    resizeWidth.onclick = function () {};
+    var resizeHeight = menu['resize'].addItem('Resize Height');
+    resizeHeight.onclick = function () {};
+    var parentWidth = menu['resize'].addItem('Fit Parent Width');
+    parentWidth.onclick = function () {};
+    var parentHeight = menu['resize'].addItem('Fit Parent Height');
+    parentHeight.onclick = function () {};
+    //Movable Menu (On or Off)
+    menu['movable'].setItemText(0, 'Movable');
+    var movableOn = menu['movable'].addItem('Yes');
+    movableOn.onclick = function () {};
+    var movableOff = menu['movable'].addItem('No');
+    movableOff.onclick = function () {};
+
+    //Main window configuration
+    body.oncontextmenu = function (e) { //Create custom context menu
         if (e.target.className !== 'rightclick' && e.target.className !== 'option')
             menu['body'].show(e.clientX, e.clientY);
-        e.preventDefault();
+        if (e.target === body) { //Check if body is target
+            srcElement = body; //Set selected element
+            menu['body'].setItemText(0, 'Window'); //Change 'body' menu Title
+        }
+        e.preventDefault(); //Ignore original context menu
     };
+    //Hide menu(s)
     body.onclick = function (e) {
         if (e.target.className !== 'rightclick' && e.target.className !== 'option')
             for (var m in menu)
@@ -179,9 +357,37 @@ window.onload = function () {
                 if (m !== 'body')
                     menu[m].hide();
     };
+
+    //Custom Menu Functions
     hideMenu = function (leave) {
         for (var m in menu)
             if (m !== 'body' && m !== leave)
                 menu[m].hide();
     };
+    showMenu = function (show, plusy) {
+        var pos = menu['body'].getPosition();
+        menu[show].show(pos.x + 150, pos.y + (plusy * 20));
+    };
+    hideAll = function() {
+        hideMenu('body'); //Hide every other menu
+        menu['body'].hide(); //Hide the body menu afterwards
+    };
+
+    //Event Functions
+    function _moveX(e) {
+        var gui = getGuiByElement(srcElement);
+        var pos = gui.getPosition();
+        gui.setPosition(e.clientX,pos.y);
+    }
+    function _moveY(e) {
+        var gui = getGuiByElement(srcElement);
+        var pos = gui.getPosition();
+        gui.setPosition(pos.x,e.clientY);
+    }
+    function _moveXY(e) {
+        var gui = getGuiByElement(srcElement);
+        gui.setPosition(e.clientX,e.clientY);
+    }
+
+    l.style.display = 'none'; //Stop loader
 };

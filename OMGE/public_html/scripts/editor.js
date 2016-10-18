@@ -117,13 +117,20 @@ window.onload = function () {
     };
     //Resize menu interaction
     var resize = menu['body'].addItem('Resize');
+    resize.onclick = function() { //Resize Width and Height
+      body.addEventListener('mousemove',_resizeWH);
+      srcElement.onclick = function(){
+          body.removeEventListener('mousemove',_resizeWH);
+      };
+      hideAll();
+    };
     resize.onmouseover = function () { //Show Resizing Menu
         hideMenu('resize');
         showMenu('resize', 2);
     };
     //Text Selection
     var text = menu['body'].addItem('Set Text');
-    text.onclick = function (e) { //Set Selected Element Text
+    text.onclick = function () { //Set Selected Element Text
         var newText = prompt('Set new Text');
         var gui = getGuiByElement(srcElement);
         if (!gui)
@@ -337,9 +344,17 @@ window.onload = function () {
         hideAll();
     };
     var parentWidth = menu['resize'].addItem('Fit Parent Width');
-    parentWidth.onclick = function () {};
+    parentWidth.onclick = function (e) {
+        var gui = getGuiByElement(srcElement);
+        var size = gui.getSize();
+        gui.setSize(window.innerWidth,size.height);
+    };
     var parentHeight = menu['resize'].addItem('Fit Parent Height');
-    parentHeight.onclick = function () {};
+    parentHeight.onclick = function (e) {
+        var gui = getGuiByElement(srcElement);
+        var size = gui.getSize();
+        gui.setSize(size.width,window.innerHeight);
+    };
     //Movable Menu (On or Off)
     menu['movable'].setItemText(0, 'Movable');
     var movableOn = menu['movable'].addItem('Yes');
@@ -415,7 +430,7 @@ window.onload = function () {
     function _resizeWH(e) {
         var gui = getGuiByElement(srcElement);
         var pos = gui.getPosition();
-        gui.setSize(e.clientX - pos.x, e.clientY - pos.y);
+        gui.setSize(e.clientX+1 - pos.x, e.clientY+1 - pos.y);
     }
 
     l.style.display = 'none'; //Stop loader

@@ -113,13 +113,13 @@ window.onload = function () {
     };
     move.onmouseover = function () { //Show Moving Menu
         hideMenu('move');
-        showMenu('move', 2);
+        showMenu('move', 1.5);
     };
     //Resize menu interaction
     var resize = menu['body'].addItem('Resize');
     resize.onmouseover = function () { //Show Resizing Menu
         hideMenu('resize');
-        showMenu('resize', 3);
+        showMenu('resize', 2);
     };
     //Text Selection
     var text = menu['body'].addItem('Set Text');
@@ -321,9 +321,21 @@ window.onload = function () {
     //Resizement Menu
     menu['resize'].setItemText(0, 'Resize');
     var resizeWidth = menu['resize'].addItem('Resize Width');
-    resizeWidth.onclick = function () {};
+    resizeWidth.onclick = function () {
+        body.addEventListener('mousemove', _resizeWidth);
+        srcElement.onclick = function() {
+            body.removeEventListener('mousemove',_resizeWidth);
+        };
+        hideAll();
+    };
     var resizeHeight = menu['resize'].addItem('Resize Height');
-    resizeHeight.onclick = function () {};
+    resizeHeight.onclick = function () {
+        body.addEventListener('mousemove', _resizeHeight);
+        srcElement.onclick = function() {
+            body.removeEventListener('mousemove',_resizeHeight);
+        };
+        hideAll();
+    };
     var parentWidth = menu['resize'].addItem('Fit Parent Width');
     parentWidth.onclick = function () {};
     var parentHeight = menu['resize'].addItem('Fit Parent Height');
@@ -387,6 +399,23 @@ window.onload = function () {
     function _moveXY(e) {
         var gui = getGuiByElement(srcElement);
         gui.setPosition(e.clientX,e.clientY);
+    }
+    function _resizeWidth(e) {
+        var gui = getGuiByElement(srcElement);
+        var pos = gui.getPosition();
+        var size = gui.getSize();
+        gui.setSize(e.clientX+1 - pos.x, size.height);
+    }
+    function _resizeHeight(e) {
+        var gui = getGuiByElement(srcElement);
+        var pos = gui.getPosition();
+        var size = gui.getSize();
+        gui.setSize(size.width, e.clientY+1 - pos.y);
+    }
+    function _resizeWH(e) {
+        var gui = getGuiByElement(srcElement);
+        var pos = gui.getPosition();
+        gui.setSize(e.clientX - pos.x, e.clientY - pos.y);
     }
 
     l.style.display = 'none'; //Stop loader

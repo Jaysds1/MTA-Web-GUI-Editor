@@ -89,8 +89,6 @@ window.onload = function () {
     menu['create'] = new Menu(0, 0);
     menu['move'] = new Menu(0, 0);
     menu['resize'] = new Menu(0, 0);
-    menu['movable'] = new Menu(0, 0);
-    menu['size'] = new Menu(0, 0);
     menu['position'] = new Menu(0, 0);
     menu['dimension'] = new Menu(0, 0);
 
@@ -131,7 +129,7 @@ window.onload = function () {
     //Text Selection
     var text = menu['body'].addItem('Set Text');
     text.onclick = function () { //Set Selected Element Text
-        var newText = prompt('Set new Text');
+        var newText = prompt('Set New Text');
         var gui = getGuiByElement(srcElement);
         if (!gui)
             return status.setText('');
@@ -141,30 +139,46 @@ window.onload = function () {
     //Set color
     var color = menu['body'].addItem('Set Color');
     color.onclick = function () {
-
+        var newColor = prompt('Enter A Color Name');
+        srcElement.style.color = newColor + '';
+        hideAll();
     };
     var alpha = menu['body'].addItem('Alpha');
-    alpha.onmouseover = function () { //Show Alpha-ing Menu
-        hideMenu('alpha');
-        showMenu('alpha', 6);
+    alpha.onclick = function () { //Show Alpha-ing Menu
+        var newAlpha = prompt('Enter a value between 0-100');
+        var gui = getGuiByElement(srcElement);
+        gui.setAlpha(newAlpha);
+        hideAll();
     };
     //menu['body'].addItem('Variable:');
     //menu['body'].addItem('');
     //menu['body'].addItem('Output Type:');
-    var movable = menu['body'].addItem('Movable');
-    movable.onmouseover = function () { //Show Movable Menu
-        hideMenu('movable');
-        showMenu('movable', 7);
+    var movable = menu['body'].addItem('Set Movable');
+    movable.onclick = function () { //Show Movable Menu
+        if(this.getItemText() === 'Set UnMovable'){
+            srcElement.dataset.movable = 'false';
+            movable.setItemText('Set Movable');
+        }else{
+            srcElement.dataset.movable = 'true';
+            movable.setItemText('Set UnMovable');
+        }
+        hideAll();
     };
-    var size = menu['body'].addItem('Sizable');
+    var size = menu['body'].addItem('Set Sizable');
     size.onmouseover = function () { //Show Sizing Menu
-        hideMenu('size');
-        showMenu('size', 8);
+        if(size.getItemText() === 'Set UnSizable'){
+            srcElement.dataset.sizable = 'false';
+            movable.setItemText('Set Sizable');
+        }else{
+            srcElement.dataset.sizable = 'true';
+            movable.setItemText('Set UnSizable');
+        }
+        hideAll();
     };
     var position = menu['body'].addItem('Set Position Code');
     position.onmouseover = function () { //Show Positioning Menu
         hideMenu('position');
-        showMenu('position', 9);
+        showMenu('position', 7);
     };
     var dimension = menu['body'].addItem('Dimensions');
     dimension.onmouseover = function () { //Show Dimensioning Menu
@@ -355,12 +369,42 @@ window.onload = function () {
         var size = gui.getSize();
         gui.setSize(size.width,window.innerHeight);
     };
-    //Movable Menu (On or Off)
-    menu['movable'].setItemText(0, 'Movable');
-    var movableOn = menu['movable'].addItem('Yes');
-    movableOn.onclick = function () {};
-    var movableOff = menu['movable'].addItem('No');
-    movableOff.onclick = function () {};
+    //Positioning Menu
+    menu['position'].setItemText(0,'Positioning');
+    var center = menu['position'].addItem('Center');
+    center.onclick = function(){
+        var gui = getGuiByElement(srcElement);
+        var size = gui.getSize();
+        
+        //Find Window center
+        var wSize = {width: window.innerWidth, height: window.innerHeight};
+        var wCenter = {x: wSize.width/2, y: wSize.height/2};
+        
+        gui.setPosition(wCenter.x - size.width/2,wCenter.y - size.height/2);
+    };
+    var snapRight = menu['position'].addItem('Snap Right');
+    snapRight.onclick = function(){
+        var gui = getGuiByElement(srcElement);
+        var position = gui.getPosition();
+        var size = gui.getSize();
+        
+        gui.setPosition(window.innerWidth - size.width,position.height);
+    };
+    var snapLeft = menu['position'].addItem('Snap Left');
+    snapLeft.onclick = function(){
+        var gui = getGuiByElement(srcElement);
+        var position = gui.getPosition();
+        var size = gui.getSize();
+        
+        gui.setPosition(0,position.height);
+    };
+    
+    //Dimension Menu
+    menu['dimension'].setItemText(0,'Dimensioning');
+    var setX = menu['dimension'].addItem('Set X: ');
+    var setY = menu['dimension'].addItem('Set Y: ');
+    var setWidth = menu['dimension'].addItem('Set Width: ');
+    var setHeight = menu['dimension'].addItem('Set Height: ');
 
     //Main window configuration
     body.oncontextmenu = function (e) { //Create custom context menu

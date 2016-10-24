@@ -165,7 +165,7 @@ window.onload = function () {
         hideAll();
     };
     var size = menu['body'].addItem('Set Sizable');
-    size.onmouseover = function () { //Show Sizing Menu
+    size.onclick = function () { //Show Sizing Menu
         if(size.getItemText() === 'Set UnSizable'){
             srcElement.dataset.sizable = 'false';
             movable.setItemText('Set Sizable');
@@ -183,7 +183,7 @@ window.onload = function () {
     var dimension = menu['body'].addItem('Dimensions');
     dimension.onmouseover = function () { //Show Dimensioning Menu
         hideMenu('dimension');
-        showMenu('dimension', 10);
+        showMenu('dimension', 7.5);
     };
     //menu['body'].addItem('Properties');
     var back = menu['body'].addItem('Move To Back');
@@ -362,12 +362,14 @@ window.onload = function () {
         var gui = getGuiByElement(srcElement);
         var size = gui.getSize();
         gui.setSize(window.innerWidth,size.height);
+        hideAll();
     };
     var parentHeight = menu['resize'].addItem('Fit Parent Height');
     parentHeight.onclick = function (e) {
         var gui = getGuiByElement(srcElement);
         var size = gui.getSize();
         gui.setSize(size.width,window.innerHeight);
+        hideAll();
     };
     //Positioning Menu
     menu['position'].setItemText(0,'Positioning');
@@ -381,6 +383,7 @@ window.onload = function () {
         var wCenter = {x: wSize.width/2, y: wSize.height/2};
         
         gui.setPosition(wCenter.x - size.width/2,wCenter.y - size.height/2);
+        hideAll();
     };
     var snapRight = menu['position'].addItem('Snap Right');
     snapRight.onclick = function(){
@@ -388,23 +391,52 @@ window.onload = function () {
         var position = gui.getPosition();
         var size = gui.getSize();
         
-        gui.setPosition(window.innerWidth - size.width,position.height);
+        gui.setPosition(window.innerWidth - size.width,position.y);
+        hideAll();
     };
     var snapLeft = menu['position'].addItem('Snap Left');
     snapLeft.onclick = function(){
         var gui = getGuiByElement(srcElement);
         var position = gui.getPosition();
-        var size = gui.getSize();
         
-        gui.setPosition(0,position.height);
+        gui.setPosition(0,position.y);
+        hideAll();
     };
     
     //Dimension Menu
-    menu['dimension'].setItemText(0,'Dimensioning');
+    menu['dimension'].setItemText(0,'Dimensions');
     var setX = menu['dimension'].addItem('Set X: ');
+    setX.onclick = function(){
+        var gui = getGuiByElement(srcElement);
+        var pos = gui.getPosition();
+        var newX = prompt('Enter new X position');
+        gui.setPosition(newX,pos.y);
+        hideAll();
+    };
     var setY = menu['dimension'].addItem('Set Y: ');
+    setY.onclick = function(){
+        var gui = getGuiByElement(srcElement);
+        var pos = gui.getPosition();
+        var newY = prompt('Enter new Y position');
+        gui.setPosition(pos.x,newY);
+        hideAll();
+    };
     var setWidth = menu['dimension'].addItem('Set Width: ');
+    setWidth.onclick = function(){
+        var gui = getGuiByElement(srcElement);
+        var size = gui.getSize();
+        var newW = prompt('Enter new Width size');
+        gui.setSize(newW,size.height);
+        hideAll();
+    };
     var setHeight = menu['dimension'].addItem('Set Height: ');
+    setHeight.onclick = function(){
+        var gui = getGuiByElement(srcElement);
+        var size = gui.getSize();
+        var newH = prompt('Enter new Height size');
+        gui.setSize(size.width,newH);
+        hideAll();
+    };
 
     //Main window configuration
     body.oncontextmenu = function (e) { //Create custom context menu

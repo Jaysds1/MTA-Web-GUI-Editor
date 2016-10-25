@@ -31,7 +31,7 @@
  GUIEditor.window[1] = guiCreateWindow((screenW - 721) / 2, (screenH - 391) / 2, 721, 391, "", false)
  guiWindowSetSizable(GUIEditor.window[1], false)
  
- GUIEditor.button[1] = guiCreateButton(13, 25, 104, 30, "", false, GUIEditor.window[1])
+ 
  guiSetProperty(GUIEditor.button[1], "NormalTextColour", "FFAAAAAA")
  GUIEditor.memo[1] = guiCreateMemo(144, 29, 109, 26, "", false, GUIEditor.window[1])
  GUIEditor.label[1] = guiCreateLabel(280, 30, 131, 25, "Default", false, GUIEditor.window[1])
@@ -91,7 +91,6 @@ window.onload = function () {
     menu['resize'] = new Menu(0, 0);
     menu['position'] = new Menu(0, 0);
     menu['dimension'] = new Menu(0, 0);
-
     //Start Organizing the body first
     menu['body'].setSize(150, 325);
     //Create menu interaction
@@ -102,12 +101,12 @@ window.onload = function () {
     };
     //Move menu interaction
     var move = menu['body'].addItem('Move');
-    move.onclick = function() {
-      body.addEventListener('mousemove',_moveXY);
-      srcElement.onclick = function() {
-        body.removeEventListener('mousemove',_moveXY);  
-      };
-      hideAll();
+    move.onclick = function () {
+        body.addEventListener('mousemove', _moveXY);
+        srcElement.onclick = function () {
+            body.removeEventListener('mousemove', _moveXY);
+        };
+        hideAll();
     };
     move.onmouseover = function () { //Show Moving Menu
         hideMenu('move');
@@ -115,12 +114,12 @@ window.onload = function () {
     };
     //Resize menu interaction
     var resize = menu['body'].addItem('Resize');
-    resize.onclick = function() { //Resize Width and Height
-      body.addEventListener('mousemove',_resizeWH);
-      srcElement.onclick = function(){
-          body.removeEventListener('mousemove',_resizeWH);
-      };
-      hideAll();
+    resize.onclick = function () { //Resize Width and Height
+        body.addEventListener('mousemove', _resizeWH);
+        srcElement.onclick = function () {
+            body.removeEventListener('mousemove', _resizeWH);
+        };
+        hideAll();
     };
     resize.onmouseover = function () { //Show Resizing Menu
         hideMenu('resize');
@@ -155,10 +154,10 @@ window.onload = function () {
     //menu['body'].addItem('Output Type:');
     var movable = menu['body'].addItem('Set Movable');
     movable.onclick = function () { //Show Movable Menu
-        if(this.getItemText() === 'Set UnMovable'){
+        if (this.getItemText() === 'Set UnMovable') {
             srcElement.dataset.movable = 'false';
             movable.setItemText('Set Movable');
-        }else{
+        } else {
             srcElement.dataset.movable = 'true';
             movable.setItemText('Set UnMovable');
         }
@@ -166,10 +165,10 @@ window.onload = function () {
     };
     var size = menu['body'].addItem('Set Sizable');
     size.onclick = function () { //Show Sizing Menu
-        if(size.getItemText() === 'Set UnSizable'){
+        if (size.getItemText() === 'Set UnSizable') {
             srcElement.dataset.sizable = 'false';
             movable.setItemText('Set Sizable');
-        }else{
+        } else {
             srcElement.dataset.sizable = 'true';
             movable.setItemText('Set UnSizable');
         }
@@ -213,7 +212,75 @@ window.onload = function () {
     cancel.onclick = function () {
         hideAll();
     };
-
+    //Output Code
+    var outputCode = menu['body'].addItem('Output');
+    outputCode.onclick = function () {
+        var output = window.open('output.html', '', '', false);
+        output.onload = (function () {
+            var _document = this.document;
+            var memo = _document.getElementById('output');
+            memo.innerHTML = 'GUIEditor = {\n\twindow = {},\n\t';
+            for (var ele in Editor) {
+                if (Editor[ele].length !== 0) {
+                    memo.innerHTML += ele + ' = {},\n\t';
+                }
+            }
+            memo.innerHTML += '}\n\n\GUIEditor.window[0] = guiCreateWindow('+
+                    window.screenLeft+','+
+                    window.screenTop+','+
+                    window.innerWidth+','+
+                    window.innerHeight+',\'\',false)\n';
+            for (var ele in Editor) {
+                if (Editor[ele].length !== 0) {
+                    for (var i = 0; i < Editor[ele].length; i++) {
+                        var gui = Editor[ele][i];
+                        
+                        var tmp = '';
+                        switch (ele) {
+                            /*tab: [],
+                             scrollpane: [],
+                             tabpanel: [],
+                             scrollbar: [],*/
+                            case 'button':
+                                var pos = gui.getPosition(),
+                                        size = gui.getSize(),
+                                        val = gui.getText();
+                                tmp += 'GUIEditor.'+ele+'['+i+'] = guiCreateButton(' + pos.x + ', ' + pos.y + ', ' + size.width + ', ' + size.height + ', "' + val + '", false, GUIEditor.window[0])';
+                                break;
+                            case 'memo':
+                                tmpArray = elements['memo'];
+                                break;
+                            case 'label':
+                                tmpArray = elements['label'];
+                                break;
+                            case 'checkbox':
+                                tmpArray = elements['checkbox'];
+                                break;
+                            case 'edit':
+                                tmpArray = elements['editbox'];
+                                break;
+                            case 'progressbar':
+                                tmpArray = elements['progressbar'];
+                                break;
+                            case 'radiobutton':
+                                tmpArray = elements['radiobutton'];
+                                break;
+                            case 'gridlist':
+                                tmpArray = elements['gridlist'];
+                                break;
+                            case 'staticimage':
+                                tmpArray = elements['staticimage'];
+                                break;
+                            case 'combobox':
+                                tmpArray = elements['combobox'];
+                                break;
+                        }
+                        memo.innerHTML += tmp + '\n\t';
+                    }
+                }
+            }
+        });
+    };
     //Create item Menu
     menu['create'].setItemText(0, "Create Item");
     menu['create'].setSize(150, 230);
@@ -319,14 +386,13 @@ window.onload = function () {
         Editor['combobox'].push(new ComboBox(pos.x, pos.y, 100, 100, '', false));
         hideAll();
     };
-
     //Movement Memu
     menu['move'].setItemText(0, 'Movement');
     var moveX = menu['move'].addItem('Move X');
     moveX.onclick = function () {
         body.addEventListener('mousemove', _moveX);
         srcElement.onclick = function () {
-            body.removeEventListener('mousemove',_moveX);
+            body.removeEventListener('mousemove', _moveX);
         };
         hideAll();
     };
@@ -334,26 +400,25 @@ window.onload = function () {
     moveY.onclick = function () {
         body.addEventListener('mousemove', _moveY);
         srcElement.onclick = function () {
-            body.removeEventListener('mousemove',_moveY);
+            body.removeEventListener('mousemove', _moveY);
         };
         hideAll();
     };
-
     //Resizement Menu
     menu['resize'].setItemText(0, 'Resize');
     var resizeWidth = menu['resize'].addItem('Resize Width');
     resizeWidth.onclick = function () {
         body.addEventListener('mousemove', _resizeWidth);
-        srcElement.onclick = function() {
-            body.removeEventListener('mousemove',_resizeWidth);
+        srcElement.onclick = function () {
+            body.removeEventListener('mousemove', _resizeWidth);
         };
         hideAll();
     };
     var resizeHeight = menu['resize'].addItem('Resize Height');
     resizeHeight.onclick = function () {
         body.addEventListener('mousemove', _resizeHeight);
-        srcElement.onclick = function() {
-            body.removeEventListener('mousemove',_resizeHeight);
+        srcElement.onclick = function () {
+            body.removeEventListener('mousemove', _resizeHeight);
         };
         hideAll();
     };
@@ -361,83 +426,77 @@ window.onload = function () {
     parentWidth.onclick = function (e) {
         var gui = getGuiByElement(srcElement);
         var size = gui.getSize();
-        gui.setSize(window.innerWidth,size.height);
+        gui.setSize(window.innerWidth, size.height);
         hideAll();
     };
     var parentHeight = menu['resize'].addItem('Fit Parent Height');
     parentHeight.onclick = function (e) {
         var gui = getGuiByElement(srcElement);
         var size = gui.getSize();
-        gui.setSize(size.width,window.innerHeight);
+        gui.setSize(size.width, window.innerHeight);
         hideAll();
     };
     //Positioning Menu
-    menu['position'].setItemText(0,'Positioning');
+    menu['position'].setItemText(0, 'Positioning');
     var center = menu['position'].addItem('Center');
-    center.onclick = function(){
+    center.onclick = function () {
         var gui = getGuiByElement(srcElement);
         var size = gui.getSize();
-        
         //Find Window center
         var wSize = {width: window.innerWidth, height: window.innerHeight};
-        var wCenter = {x: wSize.width/2, y: wSize.height/2};
-        
-        gui.setPosition(wCenter.x - size.width/2,wCenter.y - size.height/2);
+        var wCenter = {x: wSize.width / 2, y: wSize.height / 2};
+        gui.setPosition(wCenter.x - size.width / 2, wCenter.y - size.height / 2);
         hideAll();
     };
     var snapRight = menu['position'].addItem('Snap Right');
-    snapRight.onclick = function(){
+    snapRight.onclick = function () {
         var gui = getGuiByElement(srcElement);
         var position = gui.getPosition();
         var size = gui.getSize();
-        
-        gui.setPosition(window.innerWidth - size.width,position.y);
+        gui.setPosition(window.innerWidth - size.width, position.y);
         hideAll();
     };
     var snapLeft = menu['position'].addItem('Snap Left');
-    snapLeft.onclick = function(){
+    snapLeft.onclick = function () {
         var gui = getGuiByElement(srcElement);
         var position = gui.getPosition();
-        
-        gui.setPosition(0,position.y);
+        gui.setPosition(0, position.y);
         hideAll();
     };
-    
     //Dimension Menu
-    menu['dimension'].setItemText(0,'Dimensions');
+    menu['dimension'].setItemText(0, 'Dimensions');
     var setX = menu['dimension'].addItem('Set X: ');
-    setX.onclick = function(){
+    setX.onclick = function () {
         var gui = getGuiByElement(srcElement);
         var pos = gui.getPosition();
         var newX = prompt('Enter new X position');
-        gui.setPosition(newX,pos.y);
+        gui.setPosition(newX, pos.y);
         hideAll();
     };
     var setY = menu['dimension'].addItem('Set Y: ');
-    setY.onclick = function(){
+    setY.onclick = function () {
         var gui = getGuiByElement(srcElement);
         var pos = gui.getPosition();
         var newY = prompt('Enter new Y position');
-        gui.setPosition(pos.x,newY);
+        gui.setPosition(pos.x, newY);
         hideAll();
     };
     var setWidth = menu['dimension'].addItem('Set Width: ');
-    setWidth.onclick = function(){
+    setWidth.onclick = function () {
         var gui = getGuiByElement(srcElement);
         var size = gui.getSize();
         var newW = prompt('Enter new Width size');
-        gui.setSize(newW,size.height);
+        gui.setSize(newW, size.height);
         hideAll();
     };
     var setHeight = menu['dimension'].addItem('Set Height: ');
-    setHeight.onclick = function(){
+    setHeight.onclick = function () {
         var gui = getGuiByElement(srcElement);
         var size = gui.getSize();
         var newH = prompt('Enter new Height size');
-        gui.setSize(size.width,newH);
+        gui.setSize(size.width, newH);
         hideAll();
     };
-
     //Main window configuration
     body.oncontextmenu = function (e) { //Create custom context menu
         if (e.target.className !== 'rightclick' && e.target.className !== 'option')
@@ -460,7 +519,6 @@ window.onload = function () {
                 if (m !== 'body')
                     menu[m].hide();
     };
-
     //Custom Menu Functions
     hideMenu = function (leave) {
         for (var m in menu)
@@ -471,42 +529,41 @@ window.onload = function () {
         var pos = menu['body'].getPosition();
         menu[show].show(pos.x + 150, pos.y + (plusy * 20));
     };
-    hideAll = function() {
+    hideAll = function () {
         hideMenu('body'); //Hide every other menu
         menu['body'].hide(); //Hide the body menu afterwards
     };
-
     //Event Functions
     function _moveX(e) {
         var gui = getGuiByElement(srcElement);
         var pos = gui.getPosition();
-        gui.setPosition(e.clientX,pos.y);
+        gui.setPosition(e.clientX, pos.y);
     }
     function _moveY(e) {
         var gui = getGuiByElement(srcElement);
         var pos = gui.getPosition();
-        gui.setPosition(pos.x,e.clientY);
+        gui.setPosition(pos.x, e.clientY);
     }
     function _moveXY(e) {
         var gui = getGuiByElement(srcElement);
-        gui.setPosition(e.clientX,e.clientY);
+        gui.setPosition(e.clientX, e.clientY);
     }
     function _resizeWidth(e) {
         var gui = getGuiByElement(srcElement);
         var pos = gui.getPosition();
         var size = gui.getSize();
-        gui.setSize(e.clientX+1 - pos.x, size.height);
+        gui.setSize(e.clientX + 1 - pos.x, size.height);
     }
     function _resizeHeight(e) {
         var gui = getGuiByElement(srcElement);
         var pos = gui.getPosition();
         var size = gui.getSize();
-        gui.setSize(size.width, e.clientY+1 - pos.y);
+        gui.setSize(size.width, e.clientY + 1 - pos.y);
     }
     function _resizeWH(e) {
         var gui = getGuiByElement(srcElement);
         var pos = gui.getPosition();
-        gui.setSize(e.clientX+1 - pos.x, e.clientY+1 - pos.y);
+        gui.setSize(e.clientX + 1 - pos.x, e.clientY + 1 - pos.y);
     }
 
     l.style.display = 'none'; //Stop loader

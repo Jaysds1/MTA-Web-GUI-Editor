@@ -172,7 +172,7 @@ function Button(x, y, width, height, text, relative, parent) {
     var element = gui('button', parent);
     GUI.call(this, element);
 
-    element.oncontextmenu = function (e) {
+    element.oncontextmenu = function () {
         srcElement = this;
         menu['body'].setItemText(0, 'Button');
     };
@@ -192,12 +192,18 @@ function Button(x, y, width, height, text, relative, parent) {
 }
 Button.prototype = Object.create(GUI.prototype);
 Button.prototype.constructor = Button;
+Class = Button.prototype;
+
+Class.setText = function(text) {
+  srcElement.innerHTML = text;
+  srcElement.value = text;
+};
 
 function CheckBox(x, y, width, height, text, selected, relative, parent) {
     var element = gui('input', parent);
     element.type = 'checkbox';
     GUI.call(this, element);
-    element.oncontextmenu = function (e) {
+    element.oncontextmenu = function () {
         srcElement = this;
         menu['body'].setItemText(0, 'Checkbox');
     };
@@ -230,7 +236,7 @@ Class.getSelected = function () {
 function ComboBox(x, y, width, height, caption, relative, parent) {
     var element = gui('select', parent);
     GUI.call(this, element);
-    element.oncontextmenu = function (e) {
+    element.oncontextmenu = function () {
         srcElement = this;
         menu['body'].setItemText(0, 'Combobox');
     };
@@ -290,7 +296,7 @@ function Edit(x, y, width, height, text, relative, parent) {
     var element = gui('input', parent);
     element.type = 'text';
     GUI.call(this, element);
-    element.oncontextmenu = function (e) {
+    element.oncontextmenu = function () {
         srcElement = this;
         menu['body'].setItemText(0, 'Edit box');
     };
@@ -302,7 +308,7 @@ function Edit(x, y, width, height, text, relative, parent) {
     s.top = y + "px";
     s.width = width + "px";
     s.height = height + "px";
-    element.dataset.caption = text;
+    element.dataset.caption = text+'';
     this.parent = parent;
     
     elements['editbox'].push(this);
@@ -351,7 +357,6 @@ function Memo(x, y, width, height, text, relative, parent) {
     var element = gui('textarea', parent);
     GUI.call(this, element);
     element.oncontextmenu = function (e) {
-        console.log(e);
         srcElement = this;
         menu['body'].setItemText(0, 'Memo');
     };
@@ -530,6 +535,10 @@ function Label(x, y, width, height, text, relative, parent) {
 Label.prototype = Object.create(GUI.prototype);
 Label.prototype.constructor = Label;
 Class = Label.prototype;
+
+Class.setText = function(text) {
+  srcElement.innerHTML = text;
+};
 
 function Window(x, y, width, height, titleBarText, relative) {
 

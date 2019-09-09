@@ -61,7 +61,7 @@ function getGuiElementsByType(type) {
     return tmpArray;
 }
 function getGuiByElement(element){
-    //Temporary array for storing the element's found array
+    //Temporary array for storing the element's found
     var type = element.tagName==='INPUT'?element.type:element.tagName;
     var tmpArray = getGuiElementsByType(type);
     if(!tmpArray)
@@ -78,18 +78,22 @@ GUI = function (element) {
     return this;
 };
 var Class = GUI.prototype;
+//BringToFront
 Class.bringToFront = function () {
     this.element.style.zIndex = 1;
 };
+//MoveToBack
 Class.moveToBack = function () {
     this.element.style.zIndex = 0;
 };
 
+//Create Font
 Class.createFont = function (filepath, size) {
     this.font = filepath;
     this.size = size;
 };
 
+//Alpha
 Class.setAlpha = function (alpha) {
     this.element.style.opacity = alpha;
 };
@@ -97,6 +101,7 @@ Class.getAlpha = function () {
     return this.element.style.opacity;
 };
 
+//Enabled
 Class.setEnabled = function (enabled) {
     this.element.disabled = !enabled;
 };
@@ -104,6 +109,7 @@ Class.getEnabled = function () {
     return this.element.disabled;
 };
 
+//Font
 Class.setFont = function (font) {
     this.element.style.fontFamily = font;
 };
@@ -111,6 +117,7 @@ Class.getFont = function () {
     return this.element.style.fontFamily;
 };
 
+//Position
 Class.setPosition = function (x, y, relative) {
     if (relative)
         this.element.style.position = 'relative';
@@ -126,6 +133,7 @@ Class.getPosition = function (relative) {
     return {x: x, y: y};
 };
 
+//Size
 Class.setSize = function (width, height, relative) {
     if (relative)
         this.element.dataset.sizeRelative = true;
@@ -141,6 +149,7 @@ Class.getSize = function (relative) {
     return {width: width, height: height};
 };
 
+//Text
 Class.setText = function (text) {
     this.element.value = text;
 };
@@ -148,6 +157,7 @@ Class.getText = function () {
     return this.element.value;
 };
 
+//Visibility
 Class.setVisible = function (visible) {
     this.element.hidden = !visible;
 };
@@ -155,6 +165,7 @@ Class.getVisible = function () {
     return !this.element.hidden;
 };
 
+//Destroy Element
 Class.destroy = function () {
     this.element.parentNode.removeChild(this.element);
     delete this;
@@ -497,6 +508,7 @@ function TabPanel(x, y, width, height, relative, parent) {
 TabPanel.prototype = Object.create(GUI.prototype);
 TabPanel.prototype.constructor = TabPanel;
 Class = TabPanel.prototype;
+
 function Tab(text, parent) {
     var element = gui('', parent);
     GUI.call(this, element);
@@ -511,6 +523,7 @@ function Tab(text, parent) {
 Tab.prototype = Object.create(GUI.prototype);
 Tab.prototype.constructor = Tab;
 Class = Tab.prototype;
+
 function Label(x, y, width, height, text, relative, parent) {
     var element = gui('label', parent);
     GUI.call(this, element);
@@ -557,10 +570,8 @@ Status = function (text) {
         return prevStatus; //Get the previous status class created
 
     this.element = document.getElementById('status'); //Get status bar
-    //set new text
-    if (text)
+    if (text)//set new text
         this.element.innerHTML = text;
-
 
     this.setText = function (text) {
         this.element.innerHTML = text;

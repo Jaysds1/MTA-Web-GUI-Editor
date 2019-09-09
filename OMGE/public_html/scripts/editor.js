@@ -92,7 +92,7 @@ window.onload = function () {
     menu['position'] = new Menu(0, 0);
     menu['dimension'] = new Menu(0, 0);
     //Start Organizing the body first
-    menu['body'].setSize(150, 325);
+    menu['body'].setSize(150, 300);
     //Create menu interaction
     var create = menu['body'].addItem('Create');
     create.onmouseover = function () { //Show Creation Menu
@@ -131,7 +131,7 @@ window.onload = function () {
         var newText = prompt('Set New Text');
         var gui = getGuiByElement(srcElement);
         if (!gui)
-            return status.setText('');
+            return status.setText('Element not found. Delete and create Element again.');
         gui.setText(newText);
         hideAll();
     };
@@ -167,10 +167,10 @@ window.onload = function () {
     size.onclick = function () { //Show Sizing Menu
         if (size.getItemText() === 'Set UnSizable') {
             srcElement.dataset.sizable = 'false';
-            movable.setItemText('Set Sizable');
+            size.setItemText('Set Sizable');
         } else {
             srcElement.dataset.sizable = 'true';
-            movable.setItemText('Set UnSizable');
+            size.setItemText('Set UnSizable');
         }
         hideAll();
     };
@@ -191,7 +191,7 @@ window.onload = function () {
             return;
         var gui = getGuiByElement(srcElement);
         if (!gui)
-            return status.setText('');
+            return status.setText('Element not found. Delete and create Element again.');
         gui.moveToBack();
         hideAll();
     };
@@ -203,7 +203,7 @@ window.onload = function () {
             return;
         var gui = getGuiByElement(srcElement);
         if (!gui)
-            return status.setText("Could not delete element");
+            return status.setText("Could not delete element.");
         gui.destroy();
         hideAll();
     };
@@ -229,7 +229,8 @@ window.onload = function () {
                     window.screenLeft+','+
                     window.screenTop+','+
                     window.innerWidth+','+
-                    window.innerHeight+',\'\',false)\n';
+                    window.innerHeight+','+
+                    window.title +',false)\n';
             for (var ele in Editor) {
                 if (Editor[ele].length !== 0) {
                     for (var i = 0; i < Editor[ele].length; i++) {
@@ -342,6 +343,9 @@ window.onload = function () {
     };
     var gridlist = menu['create'].addItem('Gridlist');
     gridlist.onclick = function (e) { //Create Gridlist
+        status.setText('Gridlist not available.');
+        status.setLevel(3);
+        return;
         if (e.target !== gridlist)
             return;
         var pos = menu['body'].getPosition();
@@ -349,6 +353,9 @@ window.onload = function () {
     };
     var tabpanel = menu['create'].addItem('Tab Panel');
     tabpanel.onclick = function (e) { //Create TabPanel
+        status.setText('Tab Panel not available.');
+        status.setLevel(3);
+        return;
         if (e.target !== tabpanel)
             return;
         var pos = menu['body'].getPosition();
@@ -364,6 +371,9 @@ window.onload = function () {
     };
     var scrollbar = menu['create'].addItem('Scrollbar');
     scrollbar.onclick = function (e) { //Create ScrollBar
+        status.setText('ScrollBar not available.');
+        status.setLevel(3);
+        return;
         if (e.target !== scrollbar)
             return;
         var pos = menu['body'].getPosition();
@@ -372,6 +382,9 @@ window.onload = function () {
     };
     var scrollpane = menu['create'].addItem('Scrollpane');
     scrollpane.onclick = function (e) { //Create ScrollPane
+        status.setText('ScrollPane not available.');
+        status.setLevel(3);
+        return;
         if (e.target !== scrollpane)
             return;
         var pos = menu['body'].getPosition();
@@ -537,16 +550,16 @@ window.onload = function () {
     function _moveX(e) {
         var gui = getGuiByElement(srcElement);
         var pos = gui.getPosition();
-        gui.setPosition(e.clientX, pos.y);
+        gui.setPosition(e.clientX+1, pos.y);
     }
     function _moveY(e) {
         var gui = getGuiByElement(srcElement);
         var pos = gui.getPosition();
-        gui.setPosition(pos.x, e.clientY);
+        gui.setPosition(pos.x, e.clientY+1);
     }
     function _moveXY(e) {
         var gui = getGuiByElement(srcElement);
-        gui.setPosition(e.clientX, e.clientY);
+        gui.setPosition(e.clientX+1, e.clientY+1);
     }
     function _resizeWidth(e) {
         var gui = getGuiByElement(srcElement);

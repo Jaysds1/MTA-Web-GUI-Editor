@@ -1,5 +1,7 @@
 /*
  Name:  Jaiquon Smith
+ This class creates and defines the general 
+    'Creation Menu' used throughout the app.
  */
 
 function Menu(x, y) {

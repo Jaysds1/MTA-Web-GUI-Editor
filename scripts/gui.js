@@ -7,24 +7,24 @@
 
 //Replicating the MTA 'GUI Elements' Model
 var elements = {
-    button      :   [], //Button
-    memo        :   [], //TextArea
-    label       :   [], //Label
-    checkbox    :   [], //Input[type=checkbox]
-    editbox     :   [], //Input[type=text]
-    progressbar :   [], //Progress
-    radiobutton :   [], //Input[type=radio]
-    gridlist    :   [], //Table(thead,tfoot,tr,td,table)
-    tabpanel    :   [], //
-    staticimage :   [], //Img
-    scrollbar   :   [], //
-    scrollpane  :   [], //
-    combobox    :   []  //Select
+    button: [], //Button
+    memo: [], //TextArea
+    label: [], //Label
+    checkbox: [], //Input[type=checkbox]
+    editbox: [], //Input[type=text]
+    progressbar: [], //Progress
+    radiobutton: [], //Input[type=radio]
+    gridlist: [], //Table(thead,tfoot,tr,td,table)
+    tabpanel: [], //
+    staticimage: [], //Img
+    scrollbar: [], //
+    scrollpane: [], //
+    combobox: []  //Select
 };
 //Similar function as MTA 'getElementsByType'
 function getGuiElementsByType(type) {
     var tmpArray;
-    switch(type.toLowerCase()){
+    switch (type.toLowerCase()) {
         case 'button':
             tmpArray = elements['button'];
             break;
@@ -60,15 +60,15 @@ function getGuiElementsByType(type) {
     }
     return tmpArray;
 }
-function getGuiByElement(element){
-    //Temporary array for storing the element's found array
-    var type = element.tagName==='INPUT'?element.type:element.tagName;
+function getGuiByElement(element) {
+    //Temporary array for storing the element's found
+    var type = element.tagName === 'INPUT' ? element.type : element.tagName;
     var tmpArray = getGuiElementsByType(type);
-    if(!tmpArray)
+    if (!tmpArray)
         return false;
     //Loop through elements by type of 'element'
-    for(var i=0; i <= tmpArray.length; i++)
-        if(tmpArray[i].element === element)//Check the class against the element
+    for (var i = 0; i <= tmpArray.length; i++)
+        if (tmpArray[i].element === element)//Check the class against the element
             return tmpArray[i]; //Return the class
     return false; //Indicate nothing was found
 }
@@ -78,18 +78,22 @@ GUI = function (element) {
     return this;
 };
 var Class = GUI.prototype;
+//BringToFront
 Class.bringToFront = function () {
     this.element.style.zIndex = 1;
 };
+//MoveToBack
 Class.moveToBack = function () {
     this.element.style.zIndex = 0;
 };
 
+//Create Font
 Class.createFont = function (filepath, size) {
     this.font = filepath;
     this.size = size;
 };
 
+//Alpha
 Class.setAlpha = function (alpha) {
     this.element.style.opacity = alpha;
 };
@@ -97,6 +101,7 @@ Class.getAlpha = function () {
     return this.element.style.opacity;
 };
 
+//Enabled
 Class.setEnabled = function (enabled) {
     this.element.disabled = !enabled;
 };
@@ -104,6 +109,7 @@ Class.getEnabled = function () {
     return this.element.disabled;
 };
 
+//Font
 Class.setFont = function (font) {
     this.element.style.fontFamily = font;
 };
@@ -111,6 +117,7 @@ Class.getFont = function () {
     return this.element.style.fontFamily;
 };
 
+//Position
 Class.setPosition = function (x, y, relative) {
     if (relative)
         this.element.style.position = 'relative';
@@ -126,6 +133,7 @@ Class.getPosition = function (relative) {
     return {x: x, y: y};
 };
 
+//Size
 Class.setSize = function (width, height, relative) {
     if (relative)
         this.element.dataset.sizeRelative = true;
@@ -141,6 +149,7 @@ Class.getSize = function (relative) {
     return {width: width, height: height};
 };
 
+//Text
 Class.setText = function (text) {
     this.element.value = text;
 };
@@ -148,6 +157,7 @@ Class.getText = function () {
     return this.element.value;
 };
 
+//Visibility
 Class.setVisible = function (visible) {
     this.element.hidden = !visible;
 };
@@ -155,6 +165,7 @@ Class.getVisible = function () {
     return !this.element.hidden;
 };
 
+//Destroy Element
 Class.destroy = function () {
     this.element.parentNode.removeChild(this.element);
     delete this;
@@ -186,7 +197,7 @@ function Button(x, y, width, height, text, relative, parent) {
     s.height = height + "px";
     s.value = text;
     this.parent = parent;
-    
+
     elements['button'].push(this);
     return this;
 }
@@ -194,9 +205,9 @@ Button.prototype = Object.create(GUI.prototype);
 Button.prototype.constructor = Button;
 Class = Button.prototype;
 
-Class.setText = function(text) {
-  srcElement.innerHTML = text;
-  srcElement.value = text;
+Class.setText = function (text) {
+    srcElement.innerHTML = text;
+    srcElement.value = text;
 };
 
 function CheckBox(x, y, width, height, text, selected, relative, parent) {
@@ -218,7 +229,7 @@ function CheckBox(x, y, width, height, text, selected, relative, parent) {
     s.value = text;
     s.selected = selected;
     this.parent = parent;
-    
+
     elements['checkbox'].push(this);
     return this;
 }
@@ -253,7 +264,7 @@ function ComboBox(x, y, width, height, caption, relative, parent) {
     var title = this.addItem(caption);
     title.disabled = true;
     this.setSelected(0, false);
-    
+
     elements['combobox'].push(this);
     return this;
 }
@@ -308,9 +319,9 @@ function Edit(x, y, width, height, text, relative, parent) {
     s.top = y + "px";
     s.width = width + "px";
     s.height = height + "px";
-    element.dataset.caption = text+'';
+    element.dataset.caption = text + '';
     this.parent = parent;
-    
+
     elements['editbox'].push(this);
     return this;
 }
@@ -370,7 +381,7 @@ function Memo(x, y, width, height, text, relative, parent) {
     s.height = height + "px";
     s.value = text;
     this.parent = parent;
-    
+
     elements['memo'].push(this);
     return this;
 }
@@ -394,7 +405,7 @@ function ProgressBar(x, y, width, height, relative, parent) {
     s.width = width + "px";
     s.height = height + "px";
     this.parent = parent;
-    
+
     elements['progressbar'].push(this);
     return this;
 }
@@ -420,7 +431,7 @@ function RadioButton(x, y, width, height, text, relative, parent) {
     s.height = height + "px";
     s.value = text;
     this.parent = parent;
-    
+
     elements['radiobutton'].push(this);
     return this;
 }
@@ -435,7 +446,7 @@ function ScrollBar(x, y, width, height, horizontal, relative, parent) {
         srcElement = this;
         menu['body'].setItemText(0, '');
     };
-    
+
     elements['scrollbar'].push(this);
     return this;
 }
@@ -450,7 +461,7 @@ function ScrollPane(x, y, width, height, relative, parent) {
         srcElement = this;
         menu['body'].setItemText(0, '');
     };
-    
+
     elements['scrollpane'].push(this);
     return this;
 }
@@ -475,7 +486,7 @@ function StaticImage(x, y, width, height, path, relative, parent) {
     s.height = height + "px";
     s.src = path;
     this.parent = parent;
-    
+
     elements['staticimage'].push(this);
     return this;
 }
@@ -490,13 +501,14 @@ function TabPanel(x, y, width, height, relative, parent) {
         srcElement = this;
         menu['body'].setItemText(0, '');
     };
-    
+
     elements['tabpanel'].push(this);
     return this;
 }
 TabPanel.prototype = Object.create(GUI.prototype);
 TabPanel.prototype.constructor = TabPanel;
 Class = TabPanel.prototype;
+
 function Tab(text, parent) {
     var element = gui('', parent);
     GUI.call(this, element);
@@ -504,13 +516,14 @@ function Tab(text, parent) {
         srcElement = this;
         menu['body'].setItemText(0, '');
     };
-    
+
     elements['tab'].push(this);
     return this;
 }
 Tab.prototype = Object.create(GUI.prototype);
 Tab.prototype.constructor = Tab;
 Class = Tab.prototype;
+
 function Label(x, y, width, height, text, relative, parent) {
     var element = gui('label', parent);
     GUI.call(this, element);
@@ -528,7 +541,7 @@ function Label(x, y, width, height, text, relative, parent) {
     s.height = height + "px";
     s.value = text;
     this.parent = parent;
-    
+
     elements['label'].push(this);
     return this;
 }
@@ -536,18 +549,82 @@ Label.prototype = Object.create(GUI.prototype);
 Label.prototype.constructor = Label;
 Class = Label.prototype;
 
-Class.setText = function(text) {
-  srcElement.innerHTML = text;
+Class.setText = function (text) {
+    srcElement.innerHTML = text;
 };
 
 function Window(x, y, width, height, titleBarText, relative) {
+    GUI.call(this, window);
+    window.oncontextmenu = function () {
+        srcElement = window;
+    };
+    
+    if (relative)
+        window.body.style.position = 'relative';
+    window.screenX = x;
+    window.screenY = y;
+    window.innerWidth = width;
+    window.innerHeight = height;
+    window.title = titleBarText;
 
     elements['window'].push(this);
-return this;
+    return this;
 }
 Window.prototype = Object.create(GUI.prototype);
 Window.prototype.constructor = Window;
 Class = Window.prototype;
+
+
+//Position
+Class.setPosition = function (x, y, relative) {
+    if (relative)
+        this.element.body.style.position = 'relative';
+    this.element.screenX = x;
+    this.element.screenY = y;
+};
+Class.getPosition = function (relative) {
+    var x = this.element.screenX, y = this.element.screenY;
+    if (relative)
+        x /= 100, y /= 100;
+    return {x: x, y: y};
+};
+
+//Size
+Class.setSize = function (width, height, relative) {
+    if (relative)
+        this.element.body.dataset.sizeRelative = true;
+    this.element.innerWidth = width;
+    this.element.innerHeight = height;
+};
+Class.getSize = function (relative) {
+    var width = this.element.innerWidth, height = this.element.innerHeight;
+    if (relative)
+        width /= 100, height /= 100;
+    return {width: width, height: height};
+};
+
+//Text
+Class.setText = function (text) {
+    this.element.title = text;
+};
+Class.getText = function () {
+    return this.element.title;
+};
+
+/*Visibility
+Class.setVisible = function (visible) {
+    this.element.hidden = !visible;
+};
+Class.getVisible = function () {
+    return !this.element.hidden;
+};*/
+
+//Destroy Element
+Class.destroy = function () {
+    delete this;
+    window.close();
+    return true;
+};
 
 
 //******************************Status Label**********************************//
@@ -557,10 +634,8 @@ Status = function (text) {
         return prevStatus; //Get the previous status class created
 
     this.element = document.getElementById('status'); //Get status bar
-    //set new text
-    if (text)
+    if (text)//set new text
         this.element.innerHTML = text;
-
 
     this.setText = function (text) {
         this.element.innerHTML = text;

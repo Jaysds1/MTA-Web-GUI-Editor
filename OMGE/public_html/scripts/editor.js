@@ -91,6 +91,7 @@ window.onload = function () {
     menu['resize'] = new Menu(0, 0);
     menu['position'] = new Menu(0, 0);
     menu['dimension'] = new Menu(0, 0);
+    
     //Start Organizing the body first
     menu['body'].setSize(150, 300);
     //Create menu interaction
@@ -99,6 +100,7 @@ window.onload = function () {
         hideMenu('create');
         showMenu('create', 1);
     };
+    create.onclick = function(e){e.preventDefault();};
     //Move menu interaction
     var move = menu['body'].addItem('Move');
     move.onclick = function () {
@@ -400,6 +402,7 @@ window.onload = function () {
         hideAll();
     };
     //Movement Memu
+    menu['move'].setSize(150, 80);
     menu['move'].setItemText(0, 'Movement');
     var moveX = menu['move'].addItem('Move X');
     moveX.onclick = function () {
@@ -418,6 +421,7 @@ window.onload = function () {
         hideAll();
     };
     //Resizement Menu
+    menu['resize'].setSize(150, 80);
     menu['resize'].setItemText(0, 'Resize');
     var resizeWidth = menu['resize'].addItem('Resize Width');
     resizeWidth.onclick = function () {
@@ -450,6 +454,7 @@ window.onload = function () {
         hideAll();
     };
     //Positioning Menu
+    menu['position'].setSize(150, 100);
     menu['position'].setItemText(0, 'Positioning');
     var center = menu['position'].addItem('Center');
     center.onclick = function () {
@@ -477,6 +482,7 @@ window.onload = function () {
         hideAll();
     };
     //Dimension Menu
+    menu['dimension'].setSize(150, 100);
     menu['dimension'].setItemText(0, 'Dimensions');
     var setX = menu['dimension'].addItem('Set X: ');
     setX.onclick = function () {
@@ -512,10 +518,17 @@ window.onload = function () {
     };
     //Main window configuration
     body.oncontextmenu = function (e) { //Create custom context menu
-        if (e.target.className !== 'rightclick' && e.target.className !== 'option')
-            menu['body'].show(e.clientX, e.clientY);
+        if (e.target.className !== 'rightclick' && e.target.className !== 'option'){
+            var pos = {x:e.clientX,y:e.clientY}
+            //Making the menu visible (if off-screen)
+            if(pos.x + 150 > window.innerWidth)
+                pos.x -= 150;
+            if(pos.y + 200 > window.innerHeight)
+                pos.y -= 200;
+            menu['body'].show(pos.x,pos.y);
+        }
         if (e.target === body) { //Check if body is target
-            srcElement = body; //Set selected element
+            //srcElement = body; //Set selected element
             menu['body'].setItemText(0, 'Window'); //Change 'body' menu Title
         }
         e.preventDefault(); //Ignore original context menu
@@ -538,8 +551,13 @@ window.onload = function () {
             if (m !== 'body' && m !== leave)
                 menu[m].hide();
     };
-    showMenu = function (show, plusy) {
+    showMenu = function (show, plusy) { //Show Menus (Excl. Body)
         var pos = menu['body'].getPosition();
+        //Making the menu visible (if off-screen)
+        if(pos.x + 150 > window.innerWidth)
+            pos.x -= 300;
+        if(pos.y + (plusy * 20) > window.innerHeight)
+            pos.y -= plusy * 20 * 2;
         menu[show].show(pos.x + 150, pos.y + (plusy * 20));
     };
     hideAll = function () {

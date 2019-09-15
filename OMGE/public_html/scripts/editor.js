@@ -91,7 +91,7 @@ window.onload = function () {
     menu['resize'] = new Menu(0, 0);
     menu['position'] = new Menu(0, 0);
     menu['dimension'] = new Menu(0, 0);
-    
+
     //Start Organizing the body first
     menu['body'].setSize(150, 300);
     //Create menu interaction
@@ -100,7 +100,9 @@ window.onload = function () {
         hideMenu('create');
         showMenu('create', 1);
     };
-    create.onclick = function(e){e.preventDefault();};
+    create.onclick = function (e) {
+        e.preventDefault();
+    };
     //Move menu interaction
     var move = menu['body'].addItem('Move');
     move.onclick = function () {
@@ -227,17 +229,17 @@ window.onload = function () {
                     memo.innerHTML += ele + ' = {},\n\t';
                 }
             }
-            memo.innerHTML += '}\n\n\GUIEditor.window[0] = guiCreateWindow('+
-                    window.screenLeft+','+
-                    window.screenTop+','+
-                    window.innerWidth+','+
-                    window.innerHeight+','+
-                    window.title +',false)\n';
+            memo.innerHTML += '}\n\n\GUIEditor.window[0] = guiCreateWindow(' +
+                    window.screenLeft + ',' +
+                    window.screenTop + ',' +
+                    window.innerWidth + ',' +
+                    window.innerHeight + ',' +
+                    window.title + ',false)\n';
             for (var ele in Editor) {
                 if (Editor[ele].length !== 0) {
                     for (var i = 0; i < Editor[ele].length; i++) {
                         var gui = Editor[ele][i];
-                        
+
                         var tmp = '';
                         switch (ele) {
                             /*tab: [],
@@ -248,7 +250,7 @@ window.onload = function () {
                                 var pos = gui.getPosition(),
                                         size = gui.getSize(),
                                         val = gui.getText();
-                                tmp += 'GUIEditor.'+ele+'['+i+'] = guiCreateButton(' + pos.x + ', ' + pos.y + ', ' + size.width + ', ' + size.height + ', "' + val + '", false, GUIEditor.window[0])';
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateButton(' + pos.x + ', ' + pos.y + ', ' + size.width + ', ' + size.height + ', "' + val + '", false, GUIEditor.window[0])';
                                 break;
                             case 'memo':
                                 tmpArray = elements['memo'];
@@ -518,14 +520,14 @@ window.onload = function () {
     };
     //Main window configuration
     body.oncontextmenu = function (e) { //Create custom context menu
-        if (e.target.className !== 'rightclick' && e.target.className !== 'option'){
-            var pos = {x:e.clientX,y:e.clientY}
+        if (e.target.className !== 'rightclick' && e.target.className !== 'option') {
+            var pos = {x: e.clientX, y: e.clientY};
             //Making the menu visible (if off-screen)
-            if(pos.x + 150 > window.innerWidth)
+            if (pos.x + 150 > window.innerWidth)
                 pos.x -= 150;
-            if(pos.y + 200 > window.innerHeight)
+            if (pos.y + 200 > window.innerHeight)
                 pos.y -= 200;
-            menu['body'].show(pos.x,pos.y);
+            menu['body'].show(pos.x, pos.y);
         }
         if (e.target === body) { //Check if body is target
             //srcElement = body; //Set selected element
@@ -554,9 +556,9 @@ window.onload = function () {
     showMenu = function (show, plusy) { //Show Menus (Excl. Body)
         var pos = menu['body'].getPosition();
         //Making the menu visible (if off-screen)
-        if(pos.x + 150 > window.innerWidth)
+        if (pos.x + 300 > window.innerWidth)
             pos.x -= 300;
-        if(pos.y + (plusy * 20) > window.innerHeight)
+        if (pos.y + plusy * 20 * 2 > window.innerHeight)
             pos.y -= plusy * 20 * 2;
         menu[show].show(pos.x + 150, pos.y + (plusy * 20));
     };
@@ -567,17 +569,20 @@ window.onload = function () {
     //Event Functions
     function _moveX(e) {
         var gui = getGuiByElement(srcElement);
-        var pos = gui.getPosition();
-        gui.setPosition(e.clientX+1, pos.y);
+        var pos = gui.getPosition(),
+                size = gui.getSize();
+        gui.setPosition(e.clientX - size.width/2, pos.y);
     }
     function _moveY(e) {
         var gui = getGuiByElement(srcElement);
-        var pos = gui.getPosition();
-        gui.setPosition(pos.x, e.clientY+1);
+        var pos = gui.getPosition(),
+                size = gui.getSize();
+        gui.setPosition(pos.x, e.clientY - size.height/2);
     }
     function _moveXY(e) {
         var gui = getGuiByElement(srcElement);
-        gui.setPosition(e.clientX+1, e.clientY+1);
+        var size = gui.getSize();
+        gui.setPosition(e.clientX - size.width/2, e.clientY - size.height/2);
     }
     function _resizeWidth(e) {
         var gui = getGuiByElement(srcElement);

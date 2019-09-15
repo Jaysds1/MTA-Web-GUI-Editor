@@ -629,13 +629,17 @@ Class.destroy = function () {
 
 //******************************Status Label**********************************//
 var prevStatus;
-Status = function (text) {
-    if (prevStatus)
+Status = function (text,level) {
+    if (prevStatus){
+        if(text)
+            prevStatus.setText(text);
+        if(level)
+            prevStatus.setLevel(level);
         return prevStatus; //Get the previous status class created
+    }
 
-    this.element = document.getElementById('status'); //Get status bar
-    if (text)//set new text
-        this.element.innerHTML = text;
+    var element = document.getElementById('status'); //Get status bar
+    GUI.call(this,element);
 
     this.setText = function (text) {
         this.element.innerHTML = text;
@@ -655,5 +659,7 @@ Status = function (text) {
                 break;
         }
     };
+    
+    this.setText(text);
     return this; //return this class
 };

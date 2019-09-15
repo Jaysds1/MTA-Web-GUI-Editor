@@ -81,7 +81,13 @@ window.onload = function () {
     l.style.display = 'block'; //Show loader
 
     window.body = document.getElementById('canvas'); //Get window canvas
-    status = new Status('Right click to start!'); //Instructions
+    status = new Status('Right click to start!'); //Instructionss
+    status.onchange = function(){
+        setTimeout(function(){
+            status.setText('Right click to start!');
+        },2000);
+    };
+    
 
 
     //Create menu-ready interactions
@@ -102,6 +108,7 @@ window.onload = function () {
     };
     create.onclick = function (e) {
         e.preventDefault();
+        new Status('Select an element to create in the Create Item Menu');
     };
     //Move menu interaction
     var move = menu['body'].addItem('Move');
@@ -586,14 +593,14 @@ window.onload = function () {
     }
     function _resizeWidth(e) {
         var gui = getGuiByElement(srcElement);
-        var pos = gui.getPosition();
-        var size = gui.getSize();
+        var pos = gui.getPosition(),
+                size = gui.getSize();
         gui.setSize(e.clientX + 1 - pos.x, size.height);
     }
     function _resizeHeight(e) {
         var gui = getGuiByElement(srcElement);
-        var pos = gui.getPosition();
-        var size = gui.getSize();
+        var pos = gui.getPosition(),
+                size = gui.getSize();
         gui.setSize(size.width, e.clientY + 1 - pos.y);
     }
     function _resizeWH(e) {

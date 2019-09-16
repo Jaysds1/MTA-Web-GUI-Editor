@@ -75,6 +75,8 @@ function getGuiByElement(element) {
 
 GUI = function (element) {
     this.element = element;
+    this.element.dataset.movable=true;
+    this.element.dataset.sizable=true;
     return this;
 };
 var Class = GUI.prototype;
@@ -245,8 +247,10 @@ Class.getSelected = function () {
 };
 
 function ComboBox(x, y, width, height, caption, relative, parent) {
+    this.items = [];
     var element = gui('select', parent);
     GUI.call(this, element);
+    this.items = [];
     element.oncontextmenu = function () {
         srcElement = this;
         menu['body'].setItemText(0, 'Combobox');
@@ -275,6 +279,7 @@ Class = ComboBox.prototype;
 Class.addItem = function (value) {
     var element = gui('option', this.element);
     element.label = value;
+    element.id = this.items.push(element) - 1;
     return element;
 };
 Class.clear = function () {

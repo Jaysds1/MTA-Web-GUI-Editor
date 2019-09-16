@@ -528,7 +528,7 @@ window.onload = function () {
         gui.setSize(size.width, newH);
         hideAll();
     };
-    //Main window configuration
+    //**************************Main window configuration*********************//
     body.oncontextmenu = function (e) { //Create custom context menu
         if (e.target.className !== 'rightclick' && e.target.className !== 'option') {
             var pos = {x: e.clientX, y: e.clientY};
@@ -547,18 +547,22 @@ window.onload = function () {
     };
     //Hide menu(s)
     body.onclick = function (e) {
-        if (e.target.className !== 'rightclick' && e.target.className !== 'option')
+        if (e.target.className !== 'rightclick' && e.target.className !== 'option'){
             for (var m in menu)
                 menu[m].hide();
+            new Status('Right Click to continue');
+        }
     };
     body.onmouseover = function (e) {
-        if (e.target.className !== 'rightclick' && e.target.className !== 'option')
+        if (e.target.className !== 'rightclick' && e.target.className !== 'option'){
             for (var m in menu)
-                if (m !== 'body')
+                if (m !== 'body') //Hide Menus (Excl. Body)
                     menu[m].hide();
+            new Status('Right Click to continue');
+        }
     };
     //Custom Menu Functions
-    hideMenu = function (leave) {
+    hideMenu = function (leave) { //Hide Menus (Excl. Body and Specified Menu)
         for (var m in menu)
             if (m !== 'body' && m !== leave)
                 menu[m].hide();
@@ -573,8 +577,9 @@ window.onload = function () {
         menu[show].show(pos.x + 150, pos.y + (plusy * 20));
     };
     hideAll = function () {
-        hideMenu('body'); //Hide every other menu
-        menu['body'].hide(); //Hide the body menu afterwards
+        //Hide every other menu then the body menu afterwards
+        hideMenu('body'); 
+        menu['body'].hide();
     };
     //Event Functions
     function _moveX(e) {

@@ -82,12 +82,6 @@ window.onload = function () {
 
     window.body = document.getElementById('canvas'); //Get window canvas
     status = new Status('Right click to start!'); //Instructionss
-    status.onchange = function(){
-        setTimeout(function(){
-            status.setText('Right click to start!');
-        },2000);
-    };
-    
 
 
     //Create menu-ready interactions
@@ -105,10 +99,10 @@ window.onload = function () {
     create.onmouseover = function () { //Show Creation Menu
         hideMenu('create');
         showMenu('create', 1);
+        new Status('Select an element in the "Create Item" Menu');
     };
     create.onclick = function (e) {
         e.preventDefault();
-        new Status('Select an element to create in the Create Item Menu');
     };
     //Move menu interaction
     var move = menu['body'].addItem('Move');
@@ -118,10 +112,12 @@ window.onload = function () {
             body.removeEventListener('mousemove', _moveXY);
         };
         hideAll();
+        new Status('Left Click when you are done');
     };
     move.onmouseover = function () { //Show Moving Menu
         hideMenu('move');
         showMenu('move', 1.5);
+        new Status('Select "Move" to position the element anywhere');
     };
     //Resize menu interaction
     var resize = menu['body'].addItem('Resize');
@@ -131,10 +127,12 @@ window.onload = function () {
             body.removeEventListener('mousemove', _resizeWH);
         };
         hideAll();
+        new Status('Left Click when you are done');
     };
     resize.onmouseover = function () { //Show Resizing Menu
         hideMenu('resize');
         showMenu('resize', 2);
+        new Status('Select "Resize" to resize the width and height');
     };
     //Text Selection
     var text = menu['body'].addItem('Set Text');
@@ -142,9 +140,10 @@ window.onload = function () {
         var newText = prompt('Set New Text');
         var gui = getGuiByElement(srcElement);
         if (!gui)
-            return status.setText('Element not found. Delete and create Element again.');
+            return new Status('Element not found. Delete and create Element again.');
         gui.setText(newText);
         hideAll();
+        new Status('Text Successfully Changed!');
     };
     //Set color
     var color = menu['body'].addItem('Set Color');
@@ -152,13 +151,17 @@ window.onload = function () {
         var newColor = prompt('Enter A Color Name');
         srcElement.style.color = newColor + '';
         hideAll();
+        new Status('Color Successfully Changed!');
     };
     var alpha = menu['body'].addItem('Alpha');
     alpha.onclick = function () { //Show Alpha-ing Menu
         var newAlpha = prompt('Enter a value between 0-100');
         var gui = getGuiByElement(srcElement);
+        if(!gui)
+            return new Status('Element not found. Delete and create Element again.');
         gui.setAlpha(newAlpha);
         hideAll();
+        new Status('Alpha Successfully Changed!');
     };
     //menu['body'].addItem('Variable:');
     //menu['body'].addItem('');

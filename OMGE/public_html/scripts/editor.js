@@ -180,10 +180,10 @@ window.onload = function () {
     movable.onclick = function () {
         if (menu['body'].getItemText(menu['body'].getSelected()) === 'Set unMovable') {
             srcElement.dataset.movable = "false";
-            menu['body'].setItemText(movable.id, 'Set Movable');
+            new Status('Element Not Movable');
         } else {
             srcElement.dataset.movable = "true";
-            menu['body'].setItemText(movable.id, 'Set unMovable');
+            new Status('Element Movable Now');
         }
         hideAll();
     };
@@ -220,9 +220,10 @@ window.onload = function () {
     back.onclick = function (e) { //Move Selected Element Back
         if (e.target !== back)
             return;
+        
         var gui = getGuiByElement(srcElement);
         if (!gui)
-            return status.setText('Element not found. Delete and create Element again.');
+            return new Status('Element not found. Delete and create Element again.',2);
         gui.moveToBack();
         hideAll();
     };
@@ -232,9 +233,10 @@ window.onload = function () {
     del.onclick = function (e) { //Delete Selected Element
         if (e.target !== del)
             return;
+        
         var gui = getGuiByElement(srcElement);
         if (!gui)
-            return status.setText("Could not delete element.");
+            return new Status("Could not delete element.",2);
         gui.destroy();
         hideAll();
     };

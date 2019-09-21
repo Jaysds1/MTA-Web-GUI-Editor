@@ -33,24 +33,23 @@
  
  
  guiSetProperty(GUIEditor.button[1], "NormalTextColour", "FFAAAAAA")
- GUIEditor.memo[1] = guiCreateMemo(144, 29, 109, 26, "", false, GUIEditor.window[1])
- GUIEditor.label[1] = guiCreateLabel(280, 30, 131, 25, "Default", false, GUIEditor.window[1])
- GUIEditor.checkbox[1] = guiCreateCheckBox(420, 26, 55, 29, "Default", false, false, GUIEditor.window[1])
- GUIEditor.edit[1] = guiCreateEdit(540, 25, 65, 30, "", false, GUIEditor.window[1])
- GUIEditor.progressbar[1] = guiCreateProgressBar(622, 20, 71, 35, false, GUIEditor.window[1])
- guiProgressBarSetProgress(GUIEditor.progressbar[1], 50)
- GUIEditor.radiobutton[1] = guiCreateRadioButton(20, 75, 97, 48, "Default", false, GUIEditor.window[1])
- GUIEditor.gridlist[1] = guiCreateGridList(149, 89, 94, 24, false, GUIEditor.window[1])
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  GUIEditor.tabpanel[1] = guiCreateTabPanel(276, 92, 135, 134, false, GUIEditor.window[1])
  
  GUIEditor.tab[1] = guiCreateTab("Tab", GUIEditor.tabpanel[1])
  
- GUIEditor.staticimage[1] = guiCreateStaticImage(420, 85, 65, 40, ":guieditor/client/colorpicker/palette.png", false, GUIEditor.window[1])
+ 
  GUIEditor.scrollbar[1] = guiCreateScrollBar(528, 86, 77, 29, true, false, GUIEditor.window[1])
  GUIEditor.scrollbar[2] = guiCreateScrollBar(620, 90, 31, 135, false, false, GUIEditor.window[1])
  guiScrollBarSetScrollPosition(GUIEditor.scrollbar[2], 100.0)
  GUIEditor.scrollpane[1] = guiCreateScrollPane(279, 253, 132, 96, false, GUIEditor.window[1])
- GUIEditor.combobox[1] = guiCreateComboBox(30, 251, 223, 83, "", false, GUIEditor.window[1])    
+ 
  end
  )
  */
@@ -262,7 +261,7 @@ window.onload = function () {
                     window.screenTop + ',' +
                     window.innerWidth + ',' +
                     window.innerHeight + ',' +
-                    window.title + ',false)\n';
+                    window.document.title + ',false)\n';
             for (var ele in Editor) {
                 if (Editor[ele].length !== 0) {
                     for (var i = 0; i < Editor[ele].length; i++) {
@@ -281,34 +280,58 @@ window.onload = function () {
                                 tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateButton(' + pos.x + ', ' + pos.y + ', ' + size.width + ', ' + size.height + ', "' + val + '", false, GUIEditor.window[0])';
                                 break;
                             case 'memo':
-                                tmpArray = elements['memo'];
+                                var pos = gui.getPosition(),
+                                        size = gui.getSize(),
+                                        val = gui.getText();
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateMemo('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', "' + val + '", false, GUIEditor.window[1])';
                                 break;
                             case 'label':
-                                tmpArray = elements['label'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize(),
+                                val = gui.getText();
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateLabel('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', "' + val + '", false, GUIEditor.window[1])';
                                 break;
                             case 'checkbox':
-                                tmpArray = elements['checkbox'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize(),
+                                val = gui.getText();
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateCheckBox('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', "' + val + '", false, false, GUIEditor.window[1])';
                                 break;
                             case 'edit':
-                                tmpArray = elements['editbox'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize(),
+                                val = gui.getText();
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateEdit('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', "' + val + '", false, GUIEditor.window[1])';
                                 break;
                             case 'progressbar':
-                                tmpArray = elements['progressbar'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize();
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateProgressBar('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', false, GUIEditor.window[1])';
+                                //guiProgressBarSetProgress(GUIEditor.progressbar[1], 50)
                                 break;
                             case 'radiobutton':
-                                tmpArray = elements['radiobutton'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize(),
+                                val = gui.getText();
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateRadioButton('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', "' + val + '", false, GUIEditor.window[1])';
                                 break;
                             case 'gridlist':
                                 tmpArray = elements['gridlist'];
+                                //GUIEditor.gridlist[1] = guiCreateGridList(149, 89, 94, 24, false, GUIEditor.window[1])
                                 break;
                             case 'staticimage':
-                                tmpArray = elements['staticimage'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize();
+                                //GUIEditor.staticimage[1] = guiCreateStaticImage(pos.x, pos.y, size.width, size.height, ":guieditor/client/colorpicker/palette.png", false, GUIEditor.window[1])
                                 break;
                             case 'combobox':
-                                tmpArray = elements['combobox'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize(),
+                                val = gui.getItemText(0);
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateComboBox('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', "' + val + '", false, GUIEditor.window[1])';
                                 break;
                         }
-                        memo.innerHTML += tmp + '\n\t';
+                        memo.innerHTML += tmp + '\n';
                     }
                 }
             }

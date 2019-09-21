@@ -480,6 +480,7 @@ window.onload = function () {
         
         var pos = menu['body'].getPosition();
         var combox = new ComboBox(pos.x, pos.y, 100, 100, '', false);
+        combox.setEnabled(false);
         Editor['combobox'].push(combox);
         hideAll();
         
@@ -558,12 +559,27 @@ window.onload = function () {
         gui.setPosition(wCenter.x - size.width / 2, wCenter.y - size.height / 2);
         hideAll();
     };
+    var snapTop = menu['position'].addItem('Snap Top');
+    snapTop.onclick = function () {
+        var gui = getGuiByElement(srcElement);
+        var position = gui.getPosition();
+        gui.setPosition(position.x, 0);
+        hideAll();
+    };
     var snapRight = menu['position'].addItem('Snap Right');
     snapRight.onclick = function () {
         var gui = getGuiByElement(srcElement);
         var position = gui.getPosition();
         var size = gui.getSize();
         gui.setPosition(window.innerWidth - size.width, position.y);
+        hideAll();
+    };
+    var snapBottom = menu['position'].addItem('Snap Bottom');
+    snapBottom.onclick = function () {
+        var gui = getGuiByElement(srcElement);
+        var position = gui.getPosition();
+        var size = gui.getSize();
+        gui.setPosition(position.x, window.innerWidth - size.height);
         hideAll();
     };
     var snapLeft = menu['position'].addItem('Snap Left');

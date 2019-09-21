@@ -322,75 +322,119 @@ window.onload = function () {
     button.onclick = function (e) { //Create Button
         if (e.target !== button)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['button'].push(new Button(pos.x, pos.y, 100, 100, '', false));
+        var btn = new Button(pos.x, pos.y, 100, 100, '', false);
+        Editor['button'].push(btn);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=btn.element;
+        resize.click();
     };
     var memo = menu['create'].addItem('Memo');
     memo.onclick = function (e) { //Create Memo
         if (e.target !== memo)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['memo'].push(new Memo(pos.x, pos.y, 100, 100, '', false));
+        var mem = new Memo(pos.x, pos.y, 100, 100, '', false);
+        Editor['memo'].push(mem);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=mem.element;
+        resize.click();
     };
     var label = menu['create'].addItem('Label');
     label.onclick = function (e) { //Create Label
         if (e.target !== label)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['label'].push(new Label(pos.x, pos.y, 100, 100, '', false));
+        var lbl = new Label(pos.x, pos.y, 100, 100, '', false);
+        Editor['label'].push(lbl);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=lbl.element;
+        resize.click();
     };
     var checkbox = menu['create'].addItem('Checkbox');
     checkbox.onclick = function (e) { //Create CheckBox
         if (e.target !== checkbox)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['checkbox'].push(new CheckBox(pos.x, pos.y, 100, 100, '', false));
+        var cbox = new CheckBox(pos.x, pos.y, 100, 100, '', false);
+        Editor['checkbox'].push(cbox);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=cbox.element;
+        resize.click();
     };
     var edit = menu['create'].addItem('Edit box');
     edit.onclick = function (e) { //Create Edit
         if (e.target !== edit)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['edit'].push(new Edit(pos.x, pos.y, 100, 50, '', false));
+        var edt = new Edit(pos.x, pos.y, 100, 50, '', false);
+        Editor['edit'].push(edt);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=edt.element;
+        resize.click();
     };
     var progress = menu['create'].addItem('Progress Bar');
     progress.onclick = function (e) { //Create ProgressBar
         if (e.target !== progress)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['progressbar'].push(new ProgressBar(pos.x, pos.y, 100, 50, false));
+        var prog = new ProgressBar(pos.x, pos.y, 100, 50, false);
+        Editor['progressbar'].push(prog);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=prog.element;
+        resize.click();
     };
     var radio = menu['create'].addItem('Radio Button');
     radio.onclick = function (e) { //Create RadioButton
         if (e.target !== radio)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['radiobutton'].push(new RadioButton(pos.x, pos.y, 100, 100, '', false));
+        var rad = new RadioButton(pos.x, pos.y, 100, 100, '', false);
+        Editor['radiobutton'].push(rad);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=rad.element;
+        resize.click();
     };
     var gridlist = menu['create'].addItem('Gridlist');
     gridlist.onclick = function (e) { //Create Gridlist
-        status.setText('Gridlist not available.');
-        status.setLevel(3);
-        return;
+        return new Status('Gridlist not available.',3);
         if (e.target !== gridlist)
             return;
+        
         var pos = menu['body'].getPosition();
         hideAll();
+        
+        //Resize afterwards
+        srcElement=grid.element;
+        resize.click();
     };
     var tabpanel = menu['create'].addItem('Tab Panel');
     tabpanel.onclick = function (e) { //Create TabPanel
-        status.setText('Tab Panel not available.');
-        status.setLevel(3);
-        return;
+        return new Status('Tab Panel not available.',3);
         if (e.target !== tabpanel)
             return;
+        
         var pos = menu['body'].getPosition();
         hideAll();
     };
@@ -399,27 +443,32 @@ window.onload = function () {
         if (e.target !== image)
             return;
         var pos = menu['body'].getPosition();
-        Editor['staticimage'].push(new StaticImage(pos.x, pos.y, 100, 100, '', false));
+        var img = new StaticImage(pos.x, pos.y, 100, 100, '', false);
+        Editor['staticimage'].push(img);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=img.element;
+        resize.click();
     };
     var scrollbar = menu['create'].addItem('Scrollbar');
     scrollbar.onclick = function (e) { //Create ScrollBar
-        status.setText('ScrollBar not available.');
-        status.setLevel(3);
-        return;
+        return new Status('ScrollBar not available.',3);
+        
         if (e.target !== scrollbar)
             return;
+        
         var pos = menu['body'].getPosition();
         Editor['scrollbar'].push(new ScrollBar());
         hideAll();
     };
     var scrollpane = menu['create'].addItem('Scrollpane');
     scrollpane.onclick = function (e) { //Create ScrollPane
-        status.setText('ScrollPane not available.');
-        status.setLevel(3);
-        return;
+        return new Status('ScrollPane not available.',3);
+        
         if (e.target !== scrollpane)
             return;
+        
         var pos = menu['body'].getPosition();
         Editor['scrollpane'].push(new ScrollPane(pos.x, pos.y));
         hideAll();
@@ -428,9 +477,15 @@ window.onload = function () {
     combobox.onclick = function (e) { //Create ComboBox
         if (e.target !== combobox)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['combobox'].push(new ComboBox(pos.x, pos.y, 100, 100, '', false));
+        var combox = new ComboBox(pos.x, pos.y, 100, 100, '', false);
+        Editor['combobox'].push(combox);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=combox.element;
+        resize.click();
     };
 
 
@@ -439,7 +494,6 @@ window.onload = function () {
     menu['move'].setItemText(0, 'Movement');
     var moveX = menu['move'].addItem('Move X');
     moveX.onclick = function () {
-
         body.addEventListener('mousemove', _moveX);
         srcElement.onclick = function () {
             body.removeEventListener('mousemove', _moveX);
@@ -448,7 +502,6 @@ window.onload = function () {
     };
     var moveY = menu['move'].addItem('Move Y');
     moveY.onclick = function () {
-
         body.addEventListener('mousemove', _moveY);
         srcElement.onclick = function () {
             body.removeEventListener('mousemove', _moveY);
@@ -462,7 +515,6 @@ window.onload = function () {
     menu['resize'].setItemText(0, 'Resize');
     var resizeWidth = menu['resize'].addItem('Resize Width');
     resizeWidth.onclick = function () {
-
         body.addEventListener('mousemove', _resizeWidth);
         srcElement.onclick = function () {
             body.removeEventListener('mousemove', _resizeWidth);
@@ -479,7 +531,6 @@ window.onload = function () {
     };
     var parentWidth = menu['resize'].addItem('Fit Parent Width');
     parentWidth.onclick = function (e) {
-
         var gui = getGuiByElement(srcElement);
         var size = gui.getSize();
         gui.setSize(window.innerWidth, size.height);
@@ -487,7 +538,6 @@ window.onload = function () {
     };
     var parentHeight = menu['resize'].addItem('Fit Parent Height');
     parentHeight.onclick = function (e) {
-
         var gui = getGuiByElement(srcElement);
         var size = gui.getSize();
         gui.setSize(size.width, window.innerHeight);
@@ -500,7 +550,6 @@ window.onload = function () {
     menu['position'].setItemText(0, 'Positioning');
     var center = menu['position'].addItem('Center');
     center.onclick = function () {
-
         var gui = getGuiByElement(srcElement);
         var size = gui.getSize();
         //Find Window center
@@ -511,7 +560,6 @@ window.onload = function () {
     };
     var snapRight = menu['position'].addItem('Snap Right');
     snapRight.onclick = function () {
-
         var gui = getGuiByElement(srcElement);
         var position = gui.getPosition();
         var size = gui.getSize();
@@ -520,7 +568,6 @@ window.onload = function () {
     };
     var snapLeft = menu['position'].addItem('Snap Left');
     snapLeft.onclick = function () {
-
         var gui = getGuiByElement(srcElement);
         var position = gui.getPosition();
         gui.setPosition(0, position.y);

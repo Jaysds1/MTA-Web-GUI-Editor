@@ -206,6 +206,7 @@ window.onload = function () {
 
         hideMenu('position');
         showMenu('position', 7);
+        new Status('Fast Element Positioniong');
     };
     var dimension = menu['body'].addItem('Dimensions');
     dimension.onmouseover = function () { //Show Dimensioning Menu
@@ -495,6 +496,7 @@ window.onload = function () {
     menu['move'].setItemText(0, 'Movement');
     var moveX = menu['move'].addItem('Move X');
     moveX.onclick = function () {
+        new Status('Moving from Left to Right',2);
         body.addEventListener('mousemove', _moveX);
         srcElement.onclick = function () {
             body.removeEventListener('mousemove', _moveX);
@@ -503,6 +505,7 @@ window.onload = function () {
     };
     var moveY = menu['move'].addItem('Move Y');
     moveY.onclick = function () {
+        new Status('Moving from Top to Bottom',2);
         body.addEventListener('mousemove', _moveY);
         srcElement.onclick = function () {
             body.removeEventListener('mousemove', _moveY);
@@ -516,6 +519,7 @@ window.onload = function () {
     menu['resize'].setItemText(0, 'Resize');
     var resizeWidth = menu['resize'].addItem('Resize Width');
     resizeWidth.onclick = function () {
+        new Status('Resizing Width Only',2);
         body.addEventListener('mousemove', _resizeWidth);
         srcElement.onclick = function () {
             body.removeEventListener('mousemove', _resizeWidth);
@@ -524,6 +528,7 @@ window.onload = function () {
     };
     var resizeHeight = menu['resize'].addItem('Resize Height');
     resizeHeight.onclick = function () {
+        new Status('Resizing Height Only',2);
         body.addEventListener('mousemove', _resizeHeight);
         srcElement.onclick = function () {
             body.removeEventListener('mousemove', _resizeHeight);

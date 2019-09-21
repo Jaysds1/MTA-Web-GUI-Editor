@@ -33,24 +33,23 @@
  
  
  guiSetProperty(GUIEditor.button[1], "NormalTextColour", "FFAAAAAA")
- GUIEditor.memo[1] = guiCreateMemo(144, 29, 109, 26, "", false, GUIEditor.window[1])
- GUIEditor.label[1] = guiCreateLabel(280, 30, 131, 25, "Default", false, GUIEditor.window[1])
- GUIEditor.checkbox[1] = guiCreateCheckBox(420, 26, 55, 29, "Default", false, false, GUIEditor.window[1])
- GUIEditor.edit[1] = guiCreateEdit(540, 25, 65, 30, "", false, GUIEditor.window[1])
- GUIEditor.progressbar[1] = guiCreateProgressBar(622, 20, 71, 35, false, GUIEditor.window[1])
- guiProgressBarSetProgress(GUIEditor.progressbar[1], 50)
- GUIEditor.radiobutton[1] = guiCreateRadioButton(20, 75, 97, 48, "Default", false, GUIEditor.window[1])
- GUIEditor.gridlist[1] = guiCreateGridList(149, 89, 94, 24, false, GUIEditor.window[1])
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  GUIEditor.tabpanel[1] = guiCreateTabPanel(276, 92, 135, 134, false, GUIEditor.window[1])
  
  GUIEditor.tab[1] = guiCreateTab("Tab", GUIEditor.tabpanel[1])
  
- GUIEditor.staticimage[1] = guiCreateStaticImage(420, 85, 65, 40, ":guieditor/client/colorpicker/palette.png", false, GUIEditor.window[1])
+ 
  GUIEditor.scrollbar[1] = guiCreateScrollBar(528, 86, 77, 29, true, false, GUIEditor.window[1])
  GUIEditor.scrollbar[2] = guiCreateScrollBar(620, 90, 31, 135, false, false, GUIEditor.window[1])
  guiScrollBarSetScrollPosition(GUIEditor.scrollbar[2], 100.0)
  GUIEditor.scrollpane[1] = guiCreateScrollPane(279, 253, 132, 96, false, GUIEditor.window[1])
- GUIEditor.combobox[1] = guiCreateComboBox(30, 251, 223, 83, "", false, GUIEditor.window[1])    
+ 
  end
  )
  */
@@ -181,10 +180,10 @@ window.onload = function () {
     movable.onclick = function () {
         if (menu['body'].getItemText(menu['body'].getSelected()) === 'Set unMovable') {
             srcElement.dataset.movable = "false";
-            menu['body'].setItemText(movable.id, 'Set Movable');
+            new Status('Element Not Movable');
         } else {
             srcElement.dataset.movable = "true";
-            menu['body'].setItemText(movable.id, 'Set unMovable');
+            new Status('Element Movable Now');
         }
         hideAll();
     };
@@ -206,6 +205,7 @@ window.onload = function () {
 
         hideMenu('position');
         showMenu('position', 7);
+        new Status('Fast Element Positioniong');
     };
     var dimension = menu['body'].addItem('Dimensions');
     dimension.onmouseover = function () { //Show Dimensioning Menu
@@ -220,9 +220,10 @@ window.onload = function () {
     back.onclick = function (e) { //Move Selected Element Back
         if (e.target !== back)
             return;
+        
         var gui = getGuiByElement(srcElement);
         if (!gui)
-            return status.setText('Element not found. Delete and create Element again.');
+            return new Status('Element not found. Delete and create Element again.',2);
         gui.moveToBack();
         hideAll();
     };
@@ -232,9 +233,10 @@ window.onload = function () {
     del.onclick = function (e) { //Delete Selected Element
         if (e.target !== del)
             return;
+        
         var gui = getGuiByElement(srcElement);
         if (!gui)
-            return status.setText("Could not delete element.");
+            return new Status("Could not delete element.",2);
         gui.destroy();
         hideAll();
     };
@@ -261,7 +263,7 @@ window.onload = function () {
                     window.screenTop + ',' +
                     window.innerWidth + ',' +
                     window.innerHeight + ',' +
-                    window.title + ',false)\n';
+                    window.document.title + ',false)\n';
             for (var ele in Editor) {
                 if (Editor[ele].length !== 0) {
                     for (var i = 0; i < Editor[ele].length; i++) {
@@ -280,34 +282,58 @@ window.onload = function () {
                                 tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateButton(' + pos.x + ', ' + pos.y + ', ' + size.width + ', ' + size.height + ', "' + val + '", false, GUIEditor.window[0])';
                                 break;
                             case 'memo':
-                                tmpArray = elements['memo'];
+                                var pos = gui.getPosition(),
+                                        size = gui.getSize(),
+                                        val = gui.getText();
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateMemo('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', "' + val + '", false, GUIEditor.window[1])';
                                 break;
                             case 'label':
-                                tmpArray = elements['label'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize(),
+                                val = gui.getText();
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateLabel('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', "' + val + '", false, GUIEditor.window[1])';
                                 break;
                             case 'checkbox':
-                                tmpArray = elements['checkbox'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize(),
+                                val = gui.getText();
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateCheckBox('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', "' + val + '", false, false, GUIEditor.window[1])';
                                 break;
                             case 'edit':
-                                tmpArray = elements['editbox'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize(),
+                                val = gui.getText();
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateEdit('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', "' + val + '", false, GUIEditor.window[1])';
                                 break;
                             case 'progressbar':
-                                tmpArray = elements['progressbar'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize();
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateProgressBar('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', false, GUIEditor.window[1])';
+                                //guiProgressBarSetProgress(GUIEditor.progressbar[1], 50)
                                 break;
                             case 'radiobutton':
-                                tmpArray = elements['radiobutton'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize(),
+                                val = gui.getText();
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateRadioButton('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', "' + val + '", false, GUIEditor.window[1])';
                                 break;
                             case 'gridlist':
                                 tmpArray = elements['gridlist'];
+                                //GUIEditor.gridlist[1] = guiCreateGridList(149, 89, 94, 24, false, GUIEditor.window[1])
                                 break;
                             case 'staticimage':
-                                tmpArray = elements['staticimage'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize();
+                                //GUIEditor.staticimage[1] = guiCreateStaticImage(pos.x, pos.y, size.width, size.height, ":guieditor/client/colorpicker/palette.png", false, GUIEditor.window[1])
                                 break;
                             case 'combobox':
-                                tmpArray = elements['combobox'];
+                                var pos = gui.getPosition(),
+                                size = gui.getSize(),
+                                val = gui.getItemText(0);
+                                tmp += 'GUIEditor.' + ele + '[' + i + '] = guiCreateComboBox('+pos.x+', '+pos.y+', '+size.width+', '+size.height+', "' + val + '", false, GUIEditor.window[1])';
                                 break;
                         }
-                        memo.innerHTML += tmp + '\n\t';
+                        memo.innerHTML += tmp + '\n';
                     }
                 }
             }
@@ -322,75 +348,119 @@ window.onload = function () {
     button.onclick = function (e) { //Create Button
         if (e.target !== button)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['button'].push(new Button(pos.x, pos.y, 100, 100, '', false));
+        var btn = new Button(pos.x, pos.y, 100, 100, '', false);
+        Editor['button'].push(btn);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=btn.element;
+        resize.click();
     };
     var memo = menu['create'].addItem('Memo');
     memo.onclick = function (e) { //Create Memo
         if (e.target !== memo)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['memo'].push(new Memo(pos.x, pos.y, 100, 100, '', false));
+        var mem = new Memo(pos.x, pos.y, 100, 100, '', false);
+        Editor['memo'].push(mem);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=mem.element;
+        resize.click();
     };
     var label = menu['create'].addItem('Label');
     label.onclick = function (e) { //Create Label
         if (e.target !== label)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['label'].push(new Label(pos.x, pos.y, 100, 100, '', false));
+        var lbl = new Label(pos.x, pos.y, 100, 100, '', false);
+        Editor['label'].push(lbl);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=lbl.element;
+        resize.click();
     };
     var checkbox = menu['create'].addItem('Checkbox');
     checkbox.onclick = function (e) { //Create CheckBox
         if (e.target !== checkbox)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['checkbox'].push(new CheckBox(pos.x, pos.y, 100, 100, '', false));
+        var cbox = new CheckBox(pos.x, pos.y, 100, 100, '', false);
+        Editor['checkbox'].push(cbox);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=cbox.element;
+        resize.click();
     };
     var edit = menu['create'].addItem('Edit box');
     edit.onclick = function (e) { //Create Edit
         if (e.target !== edit)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['edit'].push(new Edit(pos.x, pos.y, 100, 50, '', false));
+        var edt = new Edit(pos.x, pos.y, 100, 50, '', false);
+        Editor['edit'].push(edt);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=edt.element;
+        resize.click();
     };
     var progress = menu['create'].addItem('Progress Bar');
     progress.onclick = function (e) { //Create ProgressBar
         if (e.target !== progress)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['progressbar'].push(new ProgressBar(pos.x, pos.y, 100, 50, false));
+        var prog = new ProgressBar(pos.x, pos.y, 100, 50, false);
+        Editor['progressbar'].push(prog);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=prog.element;
+        resize.click();
     };
     var radio = menu['create'].addItem('Radio Button');
     radio.onclick = function (e) { //Create RadioButton
         if (e.target !== radio)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['radiobutton'].push(new RadioButton(pos.x, pos.y, 100, 100, '', false));
+        var rad = new RadioButton(pos.x, pos.y, 100, 100, '', false);
+        Editor['radiobutton'].push(rad);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=rad.element;
+        resize.click();
     };
     var gridlist = menu['create'].addItem('Gridlist');
     gridlist.onclick = function (e) { //Create Gridlist
-        status.setText('Gridlist not available.');
-        status.setLevel(3);
-        return;
+        return new Status('Gridlist not available.',3);
         if (e.target !== gridlist)
             return;
+        
         var pos = menu['body'].getPosition();
         hideAll();
+        
+        //Resize afterwards
+        srcElement=grid.element;
+        resize.click();
     };
     var tabpanel = menu['create'].addItem('Tab Panel');
     tabpanel.onclick = function (e) { //Create TabPanel
-        status.setText('Tab Panel not available.');
-        status.setLevel(3);
-        return;
+        return new Status('Tab Panel not available.',3);
         if (e.target !== tabpanel)
             return;
+        
         var pos = menu['body'].getPosition();
         hideAll();
     };
@@ -399,27 +469,32 @@ window.onload = function () {
         if (e.target !== image)
             return;
         var pos = menu['body'].getPosition();
-        Editor['staticimage'].push(new StaticImage(pos.x, pos.y, 100, 100, '', false));
+        var img = new StaticImage(pos.x, pos.y, 100, 100, '', false);
+        Editor['staticimage'].push(img);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=img.element;
+        resize.click();
     };
     var scrollbar = menu['create'].addItem('Scrollbar');
     scrollbar.onclick = function (e) { //Create ScrollBar
-        status.setText('ScrollBar not available.');
-        status.setLevel(3);
-        return;
+        return new Status('ScrollBar not available.',3);
+        
         if (e.target !== scrollbar)
             return;
+        
         var pos = menu['body'].getPosition();
         Editor['scrollbar'].push(new ScrollBar());
         hideAll();
     };
     var scrollpane = menu['create'].addItem('Scrollpane');
     scrollpane.onclick = function (e) { //Create ScrollPane
-        status.setText('ScrollPane not available.');
-        status.setLevel(3);
-        return;
+        return new Status('ScrollPane not available.',3);
+        
         if (e.target !== scrollpane)
             return;
+        
         var pos = menu['body'].getPosition();
         Editor['scrollpane'].push(new ScrollPane(pos.x, pos.y));
         hideAll();
@@ -428,9 +503,16 @@ window.onload = function () {
     combobox.onclick = function (e) { //Create ComboBox
         if (e.target !== combobox)
             return;
+        
         var pos = menu['body'].getPosition();
-        Editor['combobox'].push(new ComboBox(pos.x, pos.y, 100, 100, '', false));
+        var combox = new ComboBox(pos.x, pos.y, 100, 100, '', false);
+        combox.setEnabled(false);
+        Editor['combobox'].push(combox);
         hideAll();
+        
+        //Resize afterwards
+        srcElement=combox.element;
+        resize.click();
     };
 
 
@@ -439,7 +521,7 @@ window.onload = function () {
     menu['move'].setItemText(0, 'Movement');
     var moveX = menu['move'].addItem('Move X');
     moveX.onclick = function () {
-
+        new Status('Moving from Left to Right',2);
         body.addEventListener('mousemove', _moveX);
         srcElement.onclick = function () {
             body.removeEventListener('mousemove', _moveX);
@@ -448,7 +530,7 @@ window.onload = function () {
     };
     var moveY = menu['move'].addItem('Move Y');
     moveY.onclick = function () {
-
+        new Status('Moving from Top to Bottom',2);
         body.addEventListener('mousemove', _moveY);
         srcElement.onclick = function () {
             body.removeEventListener('mousemove', _moveY);
@@ -462,7 +544,7 @@ window.onload = function () {
     menu['resize'].setItemText(0, 'Resize');
     var resizeWidth = menu['resize'].addItem('Resize Width');
     resizeWidth.onclick = function () {
-
+        new Status('Resizing Width Only',2);
         body.addEventListener('mousemove', _resizeWidth);
         srcElement.onclick = function () {
             body.removeEventListener('mousemove', _resizeWidth);
@@ -471,6 +553,7 @@ window.onload = function () {
     };
     var resizeHeight = menu['resize'].addItem('Resize Height');
     resizeHeight.onclick = function () {
+        new Status('Resizing Height Only',2);
         body.addEventListener('mousemove', _resizeHeight);
         srcElement.onclick = function () {
             body.removeEventListener('mousemove', _resizeHeight);
@@ -479,7 +562,6 @@ window.onload = function () {
     };
     var parentWidth = menu['resize'].addItem('Fit Parent Width');
     parentWidth.onclick = function (e) {
-
         var gui = getGuiByElement(srcElement);
         var size = gui.getSize();
         gui.setSize(window.innerWidth, size.height);
@@ -487,7 +569,6 @@ window.onload = function () {
     };
     var parentHeight = menu['resize'].addItem('Fit Parent Height');
     parentHeight.onclick = function (e) {
-
         var gui = getGuiByElement(srcElement);
         var size = gui.getSize();
         gui.setSize(size.width, window.innerHeight);
@@ -500,7 +581,6 @@ window.onload = function () {
     menu['position'].setItemText(0, 'Positioning');
     var center = menu['position'].addItem('Center');
     center.onclick = function () {
-
         var gui = getGuiByElement(srcElement);
         var size = gui.getSize();
         //Find Window center
@@ -509,18 +589,31 @@ window.onload = function () {
         gui.setPosition(wCenter.x - size.width / 2, wCenter.y - size.height / 2);
         hideAll();
     };
+    var snapTop = menu['position'].addItem('Snap Top');
+    snapTop.onclick = function () {
+        var gui = getGuiByElement(srcElement);
+        var position = gui.getPosition();
+        gui.setPosition(position.x, 0);
+        hideAll();
+    };
     var snapRight = menu['position'].addItem('Snap Right');
     snapRight.onclick = function () {
-
         var gui = getGuiByElement(srcElement);
         var position = gui.getPosition();
         var size = gui.getSize();
         gui.setPosition(window.innerWidth - size.width, position.y);
         hideAll();
     };
+    var snapBottom = menu['position'].addItem('Snap Bottom');
+    snapBottom.onclick = function () {
+        var gui = getGuiByElement(srcElement);
+        var position = gui.getPosition();
+        var size = gui.getSize();
+        gui.setPosition(position.x, window.innerWidth - size.height);
+        hideAll();
+    };
     var snapLeft = menu['position'].addItem('Snap Left');
     snapLeft.onclick = function () {
-
         var gui = getGuiByElement(srcElement);
         var position = gui.getPosition();
         gui.setPosition(0, position.y);

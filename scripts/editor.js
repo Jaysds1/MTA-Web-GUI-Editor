@@ -262,8 +262,8 @@ window.onload = function () {
                     window.screenLeft + ',' +
                     window.screenTop + ',' +
                     window.innerWidth + ',' +
-                    window.innerHeight + ',' +
-                    window.document.title + ',false)\n';
+                    window.innerHeight + ',"' +
+                    window.document.title + '",false)\n';
             for (var ele in Editor) {
                 if (Editor[ele].length !== 0) {
                     for (var i = 0; i < Editor[ele].length; i++) {

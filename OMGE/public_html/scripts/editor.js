@@ -70,7 +70,7 @@ var status, srcElement, menu = {},
         }; //Element Storage
 
 window.onload = function () {
-    var l = document.getElementById('loader'); //Get loader
+    let l = document.getElementById('loader'); //Get loader
     l.style.display = 'block'; //Show loader
 
     window.body = document.getElementById('canvas'); //Get window canvas
@@ -782,4 +782,5 @@ window.onload = function () {
     }
 
     l.style.display = 'none'; //Stop loader
+    window.postMessage('Editor Ready');
 };

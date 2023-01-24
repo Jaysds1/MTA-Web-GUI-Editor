@@ -34,12 +34,6 @@
  
  guiSetProperty(GUIEditor.button[1], "NormalTextColour", "FFAAAAAA")
  
- 
- 
- 
- 
- 
- 
  GUIEditor.tabpanel[1] = guiCreateTabPanel(276, 92, 135, 134, false, GUIEditor.window[1])
  
  GUIEditor.tab[1] = guiCreateTab("Tab", GUIEditor.tabpanel[1])
@@ -506,7 +500,6 @@ window.onload = function () {
         
         var pos = menu['body'].getPosition();
         var combox = new ComboBox(pos.x, pos.y, 100, 100, '', false);
-        combox.setEnabled(false);
         Editor['combobox'].push(combox);
         hideAll();
         
@@ -710,6 +703,7 @@ window.onload = function () {
             new Status('Right Click to continue');
         }
     };
+
     //Custom Menu Functions
     hideMenu = function (leave) { //Hide Menus (Excl. Body and Specified Menu)
         for (var m in menu)

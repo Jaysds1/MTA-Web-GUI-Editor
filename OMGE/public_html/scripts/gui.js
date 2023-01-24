@@ -15,10 +15,10 @@ var elements = {
     progressbar: [], //Progress
     radiobutton: [], //Input[type=radio]
     gridlist: [], //Table(thead,tfoot,tr,td,table)
-    tabpanel: [], //
+    tabpanel: [], // div(class=tabpanel)
     staticimage: [], //Img
-    scrollbar: [], //
-    scrollpane: [], //
+    scrollbar: [], // css(scroll)
+    scrollpane: [], // div*class=scrollpane)
     combobox: []  //Select
 };
 //Similar function as MTA 'getElementsByType'
